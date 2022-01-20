@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 {
   system.stateVersion = 4;
@@ -7,14 +7,20 @@
   services.nix-daemon.enable = true;
   users.nix.configureBuildUsers = true;
 
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+
   environment.systemPackages = with pkgs; [
-    direnv
     ripgrep
     jq
     tree
     lorri
     vim
   ];
+
+  # needed to ensure nix env is properly sourced.
+  programs.zsh.enable = true;
 
   # Enable caching
   # XXX: Copied verbatim from https://github.com/iknow/nix-channel/blob/7bf3584e0bef531836050b60a9bbd29024a1af81/darwin-modules/lorri.nix
