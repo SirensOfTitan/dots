@@ -75,8 +75,22 @@
                nixpkgsConfig = with inputs; {
                  config = {
                    allowUnfree = true;
+                   allowBroken = true;
                  };
-                 overlays = [];
+                 overlays = [
+                   (final: prev: {
+                     anki-bin = prev.anki.overrideAttrs(old: {
+                       meta.platforms = ["aarch64-darwin"];
+                       src = prev.fetchurl {
+                         url = "https://apps.ankiweb.net/downloads/beta/anki-2.1.50%2Bbeta2_db804d95-mac-qt6-apple.dmg";
+                         name = "anki-mac-qt6.dmg";
+                         sha256 = "0000000000000000000000000000000000000000000000000000";
+                       };
+
+                       version = "2.1.50";
+                     });
+                   })
+                 ];
                };
 
                mkDarwinConfig = { host, user }: [
@@ -88,7 +102,7 @@
                    home-manager.useUserPackages = true;
                    home-manager.users.${user} = with self.homeManagerModules; {
                      imports = [ (./. + "/hosts/${host}/users/${user}")];
-                     nixpkgs.overlays = nixpkgsConfig.overlays;
+                     nixpkgs = nixpkgsConfig;
                    };
 
                    home-manager.extraSpecialArgs = rec {
@@ -97,6 +111,7 @@
                  }
                ];
              in {
+
                darwinConfigurations = {
                  riverrun = darwin.lib.darwinSystem {
                    inputs = inputs;

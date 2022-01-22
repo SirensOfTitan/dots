@@ -4,10 +4,20 @@
   home.stateVersion = "21.05";
   home.packages = with pkgs; [
     exercism
+    youtube-dl
+    heroku
+    anki-bin
   ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+
+  programs.git = {
+    package = pkgs.gitAndTools.gitFull;
+    enable = true;
+    userName = "Cole Potrocky";
+    userEmail = "cole@potrocky.com";
+  };
 
   programs.zsh = {
     enable = true;
