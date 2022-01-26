@@ -6,17 +6,78 @@
     exercism
     youtube-dl
     heroku
-    anki-bin
   ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox-dev-edition;
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      ublock-origin
+      localcdn
+
+      old-reddit-redirect
+      reddit-enhancement-suite
+
+      pkgs.firefox-1password
+
+      react-devtools
+    ];
+
+    profiles.default = {
+      id = 0;
+      settings = {
+        "app.update.auto" = false;
+        "signon.rememberSignons" = false;
+        "devtools.theme" = "dark";
+        "browser.shell.checkDefaultBrowser" = false;
+        "browser.newtabpage.enabled" = false;
+        "browser.newtab.url" = "about:blank";
+        "browser.newtabpage.activity-stream.enabled" = false;
+        "browser.newtabpage.enhanced" = false;
+        "browser.newtab.preload" = false;
+        "browser.newtabpage.directory.ping" = "";
+        "browser.newtabpage.directory.source" = "data:text/plain,{}";
+        "browser.urlbar.suggest.searches" = false;
+        "browser.urlbar.shortcuts.bookmarks" = false;
+        "browser.urlbar.shortcuts.history" = false;
+        "browser.urlbar.shortcuts.tabs" = false;
+        "browser.urlbar.showSearchSuggestionsFirst" = false;
+        "extensions.htmlaboutaddons.recommendations.enabled" = false;
+        "extensions.htmlaboutaddons.discover.enabled" = false;
+        "extensions.pocket.enabled" = false;
+        "app.normandy.enabled" = false;
+        "app.normandy.api_url" = "";
+        "extensions.shield-recipe-client.enabled" = false;
+        "app.shield.optoutstudies.enabled" = false;
+        "dom.battery.enabled" = false;
+        "beacon.enabled" = false;
+        "browser.send_pings" = false;
+        "browser.fixup.alternate.enabled" = false;
+        "toolkit.telemetry.enabled" = false;
+        "toolkit.telemetry.unified" = false;
+        "toolkit.telemetry.archive.enabled" = false;
+        "experiments.supported" = false;
+        "experiments.enabled" = false;
+        "experiments.manifest.uri" = "";
+        "datareporting.healthreport.uploadEnabled" = false;
+        "datareporting.healthreport.service.enabled" = false;
+        "datareporting.policy.dataSubmissionEnabled" = false;
+      };
+    };
+  };
 
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Cole Potrocky";
     userEmail = "cole@potrocky.com";
+
+    iniContent.pull.rebase = "true";
+    iniContent.merge.ff = "no";
+    iniContent.merge.conflictstyle = "diff3";
   };
 
   programs.zsh = {

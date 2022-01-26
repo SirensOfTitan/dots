@@ -11,6 +11,8 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    nur.url = "github:nix-community/NUR";
+
     # zsh plugins
     zit = {
       url = "github:thiagokokada/zit";
@@ -70,7 +72,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nur, ... }:
              let
                nixpkgsConfig = with inputs; {
                  config = {
@@ -78,17 +80,29 @@
                    allowBroken = true;
                  };
                  overlays = [
+                   nur.overlay
                    (final: prev: {
-                     anki-bin = prev.anki.overrideAttrs(old: {
+                     anki-bin = prev.anki-bin.overrideAttrs(old: {
                        meta.platforms = ["aarch64-darwin"];
                        src = prev.fetchurl {
                          url = "https://apps.ankiweb.net/downloads/beta/anki-2.1.50%2Bbeta2_db804d95-mac-qt6-apple.dmg";
                          name = "anki-mac-qt6.dmg";
-                         sha256 = "0000000000000000000000000000000000000000000000000000";
+                         sha256 = "sha256-rbioj4/z8N9Yt50+SLC08bDhRT119eocq1cX/12esGE=";
                        };
 
                        version = "2.1.50";
                      });
+
+                     firefox-dev-edition = prev.callPackage ./overlays/firefox-dev-edition.nix {};
+
+                     firefox-1password = prev.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+                       pname = "1password-beta";
+                       version = "beta";
+                       addonId = "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}";
+                       url = "https://c.1password.com/dist/1P/b5x/firefox/beta/latest.xpi";
+                       sha256 = "sha256-Y7xye46lKyFwshk9cAnaOObj3DigcMleq5dojGQDisc=";
+                       meta = prev.nur.repos.rycee.firefox-addons.onepassword-password-manager.meta;
+                     };
                    })
                  ];
                };
@@ -100,9 +114,9 @@
                    nixpkgs = nixpkgsConfig;
                    users.users.${user}.home = "/Users/${user}";
                    home-manager.useUserPackages = true;
+                   home-manager.useGlobalPkgs = true;
                    home-manager.users.${user} = with self.homeManagerModules; {
                      imports = [ (./. + "/hosts/${host}/users/${user}")];
-                     nixpkgs = nixpkgsConfig;
                    };
 
                    home-manager.extraSpecialArgs = rec {

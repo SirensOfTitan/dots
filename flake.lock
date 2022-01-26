@@ -73,12 +73,28 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1642906509,
+        "narHash": "sha256-W4H8jx1yTFyVWzSwsmfZs3Zx4LElhK/JL+vlBmSTt48=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "5583de315930c2b73c8491607fb80ab0689a014f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
+        "nur": "nur",
         "zim-completion": "zim-completion",
         "zim-environment": "zim-environment",
         "zim-git": "zim-git",
