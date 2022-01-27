@@ -1,6 +1,6 @@
 { stdenv, fetchurl, undmg, lib }:
 
-let version = "97.0b6";
+let version = "97.0b8";
 in
 stdenv.mkDerivation rec {
   pname = "firefox-dev-edition";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "firefox-dev-edition-${version}.dmg";
     url = "https://download-installer.cdn.mozilla.net/pub/devedition/releases/${version}/mac/en-US/Firefox%20${version}.dmg";
-    sha256 = "36a1d409f4ce3385a81e59fe637cbd1aebab4d11676aefd153807e9c1c85c1bc";
+    sha256 = "1e936aa7b761cb3f91a23fd11d46aab926c4dba84612b28b02c2375e67591f66";
   };
 
   buildInputs = [ undmg ];
