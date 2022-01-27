@@ -8,7 +8,6 @@
   users.nix.configureBuildUsers = true;
 
   nix.extraOptions = ''
-    auto-optimise-store = true
     experimental-features = nix-command flakes
   '';
 

@@ -78,6 +78,13 @@
                  config = {
                    allowUnfree = true;
                    allowBroken = true;
+                   nix.gc = {
+                     automatic = true;
+                     dates = "weekly";
+                     options = "--delete-older-than 30d";
+                   };
+                   nix.autoOptimiseStore = true;
+                   nix.trustedUsers = [ "root" "@wheel" ];
                  };
                  overlays = [
                    nur.overlay
