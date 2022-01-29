@@ -10,24 +10,28 @@
     };
   };
 
-  outputs = { self, flake-utils, nixpkgs, emacs-mac }:
-    flake-utils.lib.eachDefaultSystem(system:
+  outputs = { self, flake-utils, nixpkgs, emacs-mac, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         packageName = "emacs-mac";
+        emacsVersion = "28.0.91";
+        localVersion = "4";
       in {
         packages.${packageName} = pkgs.stdenv.mkDerivation {
           pname = "emacs-mac";
-          version = builtins.substring 0 7 emacs-mac.rev;
+          version = "${emacsVersion}-${
+              builtins.substring 0 4 emacs-mac.rev
+            }-${localVersion}";
 
           src = emacs-mac;
 
           meta = with nixpkgs.lib; {
             description = "The extensible, customizable text editor";
-            homepage    = "https://www.gnu.org/software/emacs/";
-            license     = licenses.gpl3Plus;
+            homepage = "https://www.gnu.org/software/emacs/";
+            license = licenses.gpl3Plus;
             maintainers = with maintainers; [ colep ];
-            platforms   = platforms.darwin;
+            platforms = platforms.darwin;
 
             longDescription = ''
               GNU Emacs is an extensible, customizable text editor—and more.  At its
@@ -53,39 +57,37 @@
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = with pkgs; [
-            autoconf
-            automake
-            pkg-config
-          ];
+          nativeBuildInputs = with pkgs; [ autoconf automake pkg-config ];
 
           doCheck = false;
 
-          buildInputs = with pkgs; with pkgs.darwin.apple_sdk.frameworks; [
-            pkgs.darwin.sigtool
-            UniformTypeIdentifiers
-            AppKit
-            Carbon
-            Cocoa
-            IOKit
-            OSAKit
-            Quartz
-            QuartzCore
-            WebKit
-            ImageCaptureCore
-            GSS
-            ImageIO
+          buildInputs = with pkgs;
+            with pkgs.darwin.apple_sdk.frameworks; [
+              pkgs.darwin.sigtool
+              UniformTypeIdentifiers
+              AppKit
+              Carbon
+              Cocoa
+              MetalKit
+              IOKit
+              OSAKit
+              Quartz
+              QuartzCore
+              WebKit
+              ImageCaptureCore
+              GSS
+              ImageIO
 
-            ncurses
-            gnutls
-            imagemagick
-            jansson
-            libxml2
-            libgccjit
-            librsvg
-            sqlite
-            texinfo
-          ];
+              ncurses
+              gnutls
+              imagemagick
+              jansson
+              libxml2
+              libgccjit
+              librsvg
+              sqlite
+              texinfo
+            ];
 
           preConfigure = "./autogen.sh";
 
@@ -99,57 +101,78 @@
             "--with-gnutls=yes"
             "--with-mac-metal"
             "--with-rsvg"
+            "--with-imagemagick"
             "--with-native-compilation"
+            "--with-x=no"
+            "--with-xpm=no"
+            "--with-jpeg=no"
+            "--with-png=no"
+            "--with-gif=no"
+            "--with-tiff=no"
             "--enable-mac-app=$$out/Applications"
           ];
 
-          postPatch = with pkgs; lib.concatStringsSep "\n" [
-            ''
-              substituteInPlace lisp/international/mule-cmds.el \
-                --replace /usr/share/locale ${gettext}/share/locale
-            ''
-            "substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'"
-            "substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'"
-            (let
-              backendPath = (lib.concatStringsSep " "
-                (builtins.map (x: ''\"-B${x}\"'') [
-                  # Paths necessary so the JIT compiler finds its libraries:
+          postPatch = with pkgs;
+            lib.concatStringsSep "\n" [
+              ''
+                substituteInPlace lisp/international/mule-cmds.el \
+                  --replace /usr/share/locale ${gettext}/share/locale
+              ''
+              ''
+                for makefile_in in $(find . -name Makefile.in -print); do
+                  substituteInPlace $makefile_in --replace /bin/pwd pwd
+                done
+              ''
+              (let
+                backendPath = (lib.concatStringsSep " "
+                  (builtins.map (x: ''\"-B${x}\"'') [
+                    # Paths necessary so the JIT compiler finds its libraries:
                     "${lib.getLib libgccjit}/lib"
                     "${lib.getLib libgccjit}/lib/gcc"
-                    "${lib.getLib stdenv.cc.libc}/lib"
+                    "${lib.getLib pkgs.stdenv.cc.libc}/lib"
 
                     # Executable paths necessary for compilation (ld, as):
-                    "${lib.getBin stdenv.cc.cc}/bin"
-                    "${lib.getBin stdenv.cc.bintools}/bin"
-                    "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-                ]));
-            in ''
-              substituteInPlace lisp/emacs-lisp/comp.el --replace \
-                "(defcustom native-comp-driver-options nil" \
-                "(defcustom native-comp-driver-options '(${backendPath})"
-            '')
-          ];
+                    "${lib.getBin pkgs.stdenv.cc.cc}/bin"
+                    "${lib.getBin pkgs.stdenv.cc.bintools}/bin"
+                    "${lib.getBin pkgs.stdenv.cc.bintools.bintools}/bin"
+                  ]));
+              in ''
+                substituteInPlace lisp/emacs-lisp/comp.el --replace \
+                  "(defcustom native-comp-driver-options nil" \
+                  "(defcustom native-comp-driver-options '(${backendPath})"
+              '')
+            ];
 
           postInstall = ''
+            mkdir -p $out/share/emacs/site-lisp
+            cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+            $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
+            siteVersionDir=`ls $out/share/emacs | grep -v site-lisp | head -n 1`
+            rm -r $out/share/emacs/$siteVersionDir/site-lisp
+
             ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
 
-    echo "Generating native-compiled trampolines..."
-    # precompile trampolines in parallel, but avoid spawning one process per trampoline.
-    # 1000 is a rough lower bound on the number of trampolines compiled.
-    $out/bin/emacs --batch --eval "(mapatoms (lambda (s) \
-      (when (subr-primitive-p (symbol-function s)) (print s))))" \
-      | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
-        $out/bin/emacs --batch -l comp --eval "(while argv \
-          (comp-trampoline-compile (intern (pop argv))))"
-    mkdir -p $out/share/emacs/native-lisp
+            echo "Generating native-compiled trampolines..."
+            # precompile trampolines in parallel, but avoid spawning one process per trampoline.
+            # 1000 is a rough lower bound on the number of trampolines compiled.
+            $out/bin/emacs --batch --eval "(mapatoms (lambda (s) \
+              (when (subr-primitive-p (symbol-function s)) (print s))))" \
+              | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
+                $out/bin/emacs --batch -l comp --eval "(while argv \
+                  (comp-trampoline-compile (intern (pop argv))))"
+            mkdir -p $out/share/emacs/native-lisp
+            $out/bin/emacs --batch \
+              --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
+              -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
           '';
 
-          CC="clang -fobjc-arc";
+          hardeningDisable = [ "format" ];
           CFLAGS = "-O3";
           LDFLAGS = "-O3 -L${pkgs.ncurses.out}/lib";
+          NATIVE_FULL_AOT = "1";
+          LIBRARY_PATH = with pkgs; "${lib.getLib pkgs.stdenv.cc.libc}/lib";
         };
 
         defaultPackage = self.packages.${system}.${packageName};
-      }
-    );
+      });
 }

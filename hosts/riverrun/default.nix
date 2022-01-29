@@ -13,11 +13,7 @@
 
   fonts = {
     enableFontDir = true;
-    fonts = with pkgs; [
-      vollkorn
-      inter
-      font-awesome
-    ];
+    fonts = with pkgs; [ vollkorn inter font-awesome ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -42,13 +38,20 @@
     docker
 
     curl
+    charles
     shellcheck
     ngrok
+    tldr
+    nixfmt
+    fd
 
     texlive.combined.scheme-medium
 
     cmake
+    time
+    coreutils
 
+    charles
     anki-bin
     firefox-dev-edition
     iterm2

@@ -13,6 +13,8 @@
 
     nur.url = "github:nix-community/NUR";
 
+    emacs-mac.url = "path:./overlays/emacs-mac";
+
     # zsh plugins
     zit = {
       url = "github:thiagokokada/zit";
@@ -72,76 +74,86 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nur, ... }:
-             let
-               nixpkgsConfig = with inputs; {
-                 config = {
-                   allowUnfree = true;
-                   allowBroken = true;
-                   nix.gc = {
-                     automatic = true;
-                     dates = "weekly";
-                     options = "--delete-older-than 30d";
-                   };
-                   nix.autoOptimiseStore = true;
-                   nix.trustedUsers = [ "root" "@wheel" ];
-                 };
-                 overlays = [
-                   nur.overlay
-                   (final: prev: {
-                     anki-bin = prev.anki-bin.overrideAttrs(old: {
-                       meta.platforms = ["aarch64-darwin"];
-                       src = prev.fetchurl {
-                         url = "https://apps.ankiweb.net/downloads/beta/anki-2.1.50%2Bbeta2_db804d95-mac-qt6-apple.dmg";
-                         name = "anki-mac-qt6.dmg";
-                         sha256 = "sha256-rbioj4/z8N9Yt50+SLC08bDhRT119eocq1cX/12esGE=";
-                       };
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nur, emacs-mac, ... }:
+    let
+      nixpkgsConfig = with inputs; {
+        config = {
+          allowUnfree = true;
+          allowBroken = true;
+          nix.gc = {
+            automatic = true;
+            dates = "weekly";
+            options = "--delete-older-than 30d";
+          };
+          nix.autoOptimiseStore = true;
+          nix.trustedUsers = [ "root" "@wheel" ];
+        };
+        overlays = [
+          nur.overlay
+          (final: prev: {
+            anki-bin = prev.anki-bin.overrideAttrs (old: {
+              meta.platforms = [ "aarch64-darwin" ];
+              src = prev.fetchurl {
+                url =
+                  "https://apps.ankiweb.net/downloads/beta/anki-2.1.50%2Bbeta2_db804d95-mac-qt6-apple.dmg";
+                name = "anki-mac-qt6.dmg";
 
-                       version = "2.1.50";
-                     });
+                sha256 = "sha256-rbioj4/z8N9Yt50+SLC08bDhRT119eocq1cX/12esGE=";
+              };
 
-                     firefox-dev-edition = prev.callPackage ./overlays/firefox-dev-edition.nix {};
+              version = "2.1.50";
+            });
 
-                     firefox-1password = prev.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
-                       pname = "1password-beta";
-                       version = "beta";
-                       addonId = "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}";
-                       url = "https://c.1password.com/dist/1P/b5x/firefox/beta/latest.xpi";
-                       sha256 = "sha256-Y7xye46lKyFwshk9cAnaOObj3DigcMleq5dojGQDisc=";
-                       meta = prev.nur.repos.rycee.firefox-addons.onepassword-password-manager.meta;
-                     };
-                   })
-                 ];
-               };
+            firefox-dev-edition =
+              prev.callPackage ./overlays/firefox-dev-edition.nix { };
+            charles = if prev.stdenv.isDarwin then
+              (prev.callPackage ./overlays/charles.nix { })
+            else
+              prev.charles;
 
-               mkDarwinConfig = { host, user }: [
-                 (./. + "/hosts/${host}")
-                 home-manager.darwinModules.home-manager
-                 {
-                   nixpkgs = nixpkgsConfig;
-                   users.users.${user}.home = "/Users/${user}";
-                   home-manager.useUserPackages = true;
-                   home-manager.useGlobalPkgs = true;
-                   home-manager.users.${user} = with self.homeManagerModules; {
-                     imports = [ (./. + "/hosts/${host}/users/${user}")];
-                   };
+            emacs-mac = emacs-mac.defaultPackage.${prev.system};
 
-                   home-manager.extraSpecialArgs = rec {
-                     inherit self;
-                   };
-                 }
-               ];
-             in {
+            firefox-1password =
+              prev.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
+                pname = "1password-beta";
+                version = "beta";
+                addonId = "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}";
+                url =
+                  "https://c.1password.com/dist/1P/b5x/firefox/beta/latest.xpi";
+                sha256 = "sha256-Y7xye46lKyFwshk9cAnaOObj3DigcMleq5dojGQDisc=";
+                meta =
+                  prev.nur.repos.rycee.firefox-addons.onepassword-password-manager.meta;
+              };
+          })
+        ];
+      };
 
-               darwinConfigurations = {
-                 riverrun = darwin.lib.darwinSystem {
-                   inputs = inputs;
-                   system = "aarch64-darwin";
-                   modules = mkDarwinConfig {
-                     host = "riverrun";
-                     user = "colepotrocky";
-                   };
-                 };
-               };
-             };
+      mkDarwinConfig = { host, user }: [
+        (./. + "/hosts/${host}")
+        home-manager.darwinModules.home-manager
+        {
+          nixpkgs = nixpkgsConfig;
+          users.users.${user}.home = "/Users/${user}";
+          home-manager.useUserPackages = true;
+          home-manager.useGlobalPkgs = true;
+          home-manager.users.${user} = with self.homeManagerModules; {
+            imports = [ (./. + "/hosts/${host}/users/${user}") ];
+          };
+
+          home-manager.extraSpecialArgs = rec { inherit self; };
+        }
+      ];
+    in {
+
+      darwinConfigurations = {
+        riverrun = darwin.lib.darwinSystem {
+          inputs = inputs;
+          system = "aarch64-darwin";
+          modules = mkDarwinConfig {
+            host = "riverrun";
+            user = "colepotrocky";
+          };
+        };
+      };
+    };
 }
