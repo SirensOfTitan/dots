@@ -2,7 +2,7 @@
 
 {
   system.stateVersion = 4;
-  nix.package = pkgs.nixUnstable;
+  nix.package = pkgs.master.nixVersions.nix_2_6;
 
   services.nix-daemon.enable = true;
   users.nix.configureBuildUsers = true;
@@ -18,18 +18,22 @@
 
   environment.systemPackages = with pkgs; [
     ripgrep
+    ffmpeg
     jq
     tree
     vim
     tree
     shellcheck
     gitAndTools.delta
-    cachix
     vollkorn
     rclone
     nextdns
     pandoc
     dnsmasq
+
+    # for emacs autoformatting
+    nodejs-17_x
+    nodePackages.prettier
 
     cloudflared
     k9s
@@ -51,6 +55,8 @@
     time
     coreutils
 
+    mpv
+    fastmod
     charles
     anki-bin
     firefox-dev-edition

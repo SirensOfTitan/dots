@@ -3,11 +3,11 @@
     "emacs-mac": {
       "flake": false,
       "locked": {
-        "lastModified": 1642629517,
-        "narHash": "sha256-4MNIn+PvchJOL1ty0HvqmT/TuH+HZWDedK+5Q2MLJ5c=",
+        "lastModified": 1643533924,
+        "narHash": "sha256-Tc3aMK7yH5BkPI61RsdJqh8KOcQL7a1tkmZuRX5zI7I=",
         "ref": "work",
-        "rev": "379a15c67ad253bf0bd014ba25c135c293719562",
-        "revCount": 152164,
+        "rev": "674407ff3a023c5c8faaab019563814e4aa697a1",
+        "revCount": 152165,
         "type": "git",
         "url": "https://bitbucket.org/mituharu/emacs-mac.git"
       },
@@ -34,11 +34,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1643119265,
-        "narHash": "sha256-mmDEctIkHSWcC/HRpeaw6QOe+DbNOSzc0wsXAHOZWwo=",
+        "lastModified": 1643381941,
+        "narHash": "sha256-pHTwvnN4tTsEKkWlXQ8JMY423epos8wUOhthpwJjtpc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b05d2077ebe219f6a47825767f8bab5c6211d200",
+        "rev": "5efc8ca954272c4376ac929f4c5ffefcc20551d5",
         "type": "github"
       },
       "original": {

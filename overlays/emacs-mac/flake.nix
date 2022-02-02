@@ -14,11 +14,12 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        stdenv = pkgs.gccStdenv;
         packageName = "emacs-mac";
         emacsVersion = "28.0.91";
         localVersion = "4";
       in {
-        packages.${packageName} = pkgs.stdenv.mkDerivation {
+        packages.${packageName} = stdenv.mkDerivation {
           pname = "emacs-mac";
           version = "${emacsVersion}-${
               builtins.substring 0 4 emacs-mac.rev
@@ -129,12 +130,12 @@
                     # Paths necessary so the JIT compiler finds its libraries:
                     "${lib.getLib libgccjit}/lib"
                     "${lib.getLib libgccjit}/lib/gcc"
-                    "${lib.getLib pkgs.stdenv.cc.libc}/lib"
+                    "${lib.getLib stdenv.cc.libc}/lib"
 
                     # Executable paths necessary for compilation (ld, as):
-                    "${lib.getBin pkgs.stdenv.cc.cc}/bin"
-                    "${lib.getBin pkgs.stdenv.cc.bintools}/bin"
-                    "${lib.getBin pkgs.stdenv.cc.bintools.bintools}/bin"
+                    "${lib.getBin stdenv.cc.cc}/bin"
+                    "${lib.getBin stdenv.cc.bintools}/bin"
+                    "${lib.getBin stdenv.cc.bintools.bintools}/bin"
                   ]));
               in ''
                 substituteInPlace lisp/emacs-lisp/comp.el --replace \
@@ -166,11 +167,15 @@
               -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
           '';
 
-          hardeningDisable = [ "format" ];
+          hardeningDisable = [ "format" ]
+            ++ (if stdenv.isAarch64 && stdenv.isDarwin then
+              [ "stackprotector" ]
+            else
+              [ ]);
           CFLAGS = "-O3";
           LDFLAGS = "-O3 -L${pkgs.ncurses.out}/lib";
           NATIVE_FULL_AOT = "1";
-          LIBRARY_PATH = with pkgs; "${lib.getLib pkgs.stdenv.cc.libc}/lib";
+          LIBRARY_PATH = with pkgs; "${lib.getLib stdenv.cc.libc}/lib";
         };
 
         defaultPackage = self.packages.${system}.${packageName};

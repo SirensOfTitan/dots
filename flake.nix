@@ -15,6 +15,12 @@
 
     emacs-mac.url = "path:./overlays/emacs-mac";
 
+    # language learning
+    mpvacious = {
+      url = "github:Ajatt-Tools/mpvacious";
+      flake = false;
+    };
+
     # zsh plugins
     zit = {
       url = "github:thiagokokada/zit";
@@ -74,7 +80,8 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nur, emacs-mac, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-master, darwin, home-manager, nur
+    , emacs-mac, mpvacious, ... }:
     let
       nixpkgsConfig = with inputs; {
         config = {
@@ -104,6 +111,8 @@
               version = "2.1.50";
             });
 
+            master = nixpkgs-master.legacyPackages.${prev.system};
+
             firefox-dev-edition =
               prev.callPackage ./overlays/firefox-dev-edition.nix { };
             charles = if prev.stdenv.isDarwin then
@@ -120,7 +129,7 @@
                 addonId = "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}";
                 url =
                   "https://c.1password.com/dist/1P/b5x/firefox/beta/latest.xpi";
-                sha256 = "sha256-Y7xye46lKyFwshk9cAnaOObj3DigcMleq5dojGQDisc=";
+                sha256 = "sha256-fAzJL2m/93/PoF8fGN3bl8C95S/d2rc4KpGJcw9Amw8";
                 meta =
                   prev.nur.repos.rycee.firefox-addons.onepassword-password-manager.meta;
               };
