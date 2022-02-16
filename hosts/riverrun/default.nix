@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 
-{
+rec {
   system.stateVersion = 4;
   nix.package = pkgs.master.nixVersions.nix_2_6;
 
@@ -11,6 +11,19 @@
     experimental-features = nix-command flakes
   '';
 
+  nix.trustedBinaryCaches = [
+    "https://cache.nixos.org"
+    "https://nix-community.cachix.org"
+    "https://sirensoftitan.cachix.org"
+  ];
+
+  nix.binaryCaches = nix.trustedBinaryCaches;
+
+  nix.binaryCachePublicKeys = [
+    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    "sirensoftitan.cachix.org-1:XzIOQ6jSxMXnoiHYFkpqN7PjEMXuXb3LYF9XlqNZAoQ="
+  ];
+
   fonts = {
     enableFontDir = true;
     fonts = with pkgs; [ vollkorn inter font-awesome ];
@@ -20,6 +33,7 @@
     ripgrep
     ffmpeg
     jq
+    cachix
     tree
     vim
     tree
@@ -40,6 +54,7 @@
 
     colima
     docker
+    lldb
 
     curl
     charles
@@ -51,6 +66,9 @@
 
     texlive.combined.scheme-medium
 
+    # Probably broken until we can get newer Apple SDK libraries
+    # inside nix.
+    # emacs-mac
     cmake
     time
     coreutils

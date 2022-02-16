@@ -14,16 +14,13 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        stdenv = pkgs.gccStdenv;
+        stdenv = pkgs.clangStdenv;
         packageName = "emacs-mac";
         emacsVersion = "28.0.91";
-        localVersion = "4";
       in {
         packages.${packageName} = stdenv.mkDerivation {
           pname = "emacs-mac";
-          version = "${emacsVersion}-${
-              builtins.substring 0 4 emacs-mac.rev
-            }-${localVersion}";
+          version = "${emacsVersion}-${builtins.substring 0 4 emacs-mac.rev}";
 
           src = emacs-mac;
 
@@ -173,9 +170,10 @@
             else
               [ ]);
           CFLAGS = "-O3";
+          CC = "/usr/bin/cc";
           LDFLAGS = "-O3 -L${pkgs.ncurses.out}/lib";
           NATIVE_FULL_AOT = "1";
-          LIBRARY_PATH = with pkgs; "${lib.getLib stdenv.cc.libc}/lib";
+          LIBRARY_PATH = "/usr/lib";
         };
 
         defaultPackage = self.packages.${system}.${packageName};

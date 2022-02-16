@@ -17,6 +17,7 @@
 
       old-reddit-redirect
       reddit-enhancement-suite
+      metamask
 
       pkgs.firefox-1password
 

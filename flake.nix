@@ -98,6 +98,7 @@
         overlays = [
           nur.overlay
           (final: prev: {
+            config.allowUnfree = true;
             anki-bin = prev.anki-bin.overrideAttrs (old: {
               meta.platforms = [ "aarch64-darwin" ];
               src = prev.fetchurl {
@@ -112,6 +113,8 @@
             });
 
             master = nixpkgs-master.legacyPackages.${prev.system};
+
+            pulumi-bin = prev.callPackage ./overlays/pulumi { };
 
             firefox-dev-edition =
               prev.callPackage ./overlays/firefox-dev-edition.nix { };
@@ -129,7 +132,7 @@
                 addonId = "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}";
                 url =
                   "https://c.1password.com/dist/1P/b5x/firefox/beta/latest.xpi";
-                sha256 = "sha256-fAzJL2m/93/PoF8fGN3bl8C95S/d2rc4KpGJcw9Amw8";
+                sha256 = "0hfy4hnw65kr1q1x482cdbkqcccrvpf3mlqrgrf2dqr1dd4qg48q";
                 meta =
                   prev.nur.repos.rycee.firefox-addons.onepassword-password-manager.meta;
               };
