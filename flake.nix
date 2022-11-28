@@ -13,8 +13,6 @@
 
     nur.url = "github:nix-community/NUR";
 
-    emacs-mac.url = "path:./overlays/emacs-mac";
-
     # language learning
     mpvacious = {
       url = "github:Ajatt-Tools/mpvacious";
@@ -40,10 +38,6 @@
     };
     zim-git = {
       url = "github:zimfw/git";
-      flake = false;
-    };
-    zim-ssh = {
-      url = "github:zimfw/ssh";
       flake = false;
     };
     zim-utility = {
@@ -81,12 +75,13 @@
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-master, darwin, home-manager, nur
-    , emacs-mac, mpvacious, ... }:
+    , mpvacious, ... }:
     let
       nixpkgsConfig = with inputs; {
         config = {
           allowUnfree = true;
           allowBroken = true;
+          allowAliases = true;
           nix.gc = {
             automatic = true;
             dates = "weekly";
@@ -99,22 +94,9 @@
           nur.overlay
           (final: prev: {
             config.allowUnfree = true;
-            anki-bin = prev.anki-bin.overrideAttrs (old: {
-              meta.platforms = [ "aarch64-darwin" ];
-              src = prev.fetchurl {
-                url =
-                  "https://apps.ankiweb.net/downloads/beta/anki-2.1.50%2Bbeta2_db804d95-mac-qt6-apple.dmg";
-                name = "anki-mac-qt6.dmg";
-
-                sha256 = "sha256-rbioj4/z8N9Yt50+SLC08bDhRT119eocq1cX/12esGE=";
-              };
-
-              version = "2.1.50";
-            });
+            config.allowAliases = true;
 
             master = nixpkgs-master.legacyPackages.${prev.system};
-
-            pulumi-bin = prev.callPackage ./overlays/pulumi { };
 
             firefox-dev-edition =
               prev.callPackage ./overlays/firefox-dev-edition.nix { };
@@ -122,20 +104,6 @@
               (prev.callPackage ./overlays/charles.nix { })
             else
               prev.charles;
-
-            emacs-mac = emacs-mac.defaultPackage.${prev.system};
-
-            firefox-1password =
-              prev.nur.repos.rycee.firefox-addons.buildFirefoxXpiAddon {
-                pname = "1password-beta";
-                version = "beta";
-                addonId = "{25fc87fa-4d31-4fee-b5c1-c32a7844c063}";
-                url =
-                  "https://c.1password.com/dist/1P/b5x/firefox/beta/latest.xpi";
-                sha256 = "0hfy4hnw65kr1q1x482cdbkqcccrvpf3mlqrgrf2dqr1dd4qg48q";
-                meta =
-                  prev.nur.repos.rycee.firefox-addons.onepassword-password-manager.meta;
-              };
           })
         ];
       };

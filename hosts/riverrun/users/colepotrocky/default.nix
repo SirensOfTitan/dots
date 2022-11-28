@@ -3,14 +3,14 @@
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ exercism youtube-dl heroku kubectl ];
+  home.packages = with pkgs; [ exercism heroku kubectl ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
 
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-dev-edition;
+    package = pkgs.hello;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       localcdn
@@ -18,8 +18,6 @@
       old-reddit-redirect
       reddit-enhancement-suite
       metamask
-
-      pkgs.firefox-1password
 
       react-devtools
     ];
@@ -163,7 +161,9 @@
     initExtraBeforeCompInit = ''
       # zimfw
       zstyle ':zim:input' double-dot-expand yes
-      zstyle ':zim:ssh' ids /dev/null
+      # Disable incessant remote calls and ssh key accesses
+      # What kind of dummy thought of this feature?
+      PURE_GIT_PULL=0
     '';
 
     initExtra = ''

@@ -1,0 +1,22 @@
+#+title: Readme
+
+** Running
+#+begin_src
+docker run --restart always --name nix-docker -d -p 3022:22 colep/nix:ssh
+#+end_src
+
+** Setup
+Copy the rsa key to your ssh folder
+#+begin_src
+chmod 600 insecure_rsa
+cp insecure_rsa ~/.ssh/docker_rsa
+#+end_src
+
+And make an entry for the container in ssh config:
+#+begin_src
+Host nix-docker
+  User root
+  HostName 127.0.0.1
+  Port 3022
+  IdentityFile ~/.ssh/docker_rsa
+#+end_src

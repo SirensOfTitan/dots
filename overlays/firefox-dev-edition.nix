@@ -1,6 +1,6 @@
 { stdenv, fetchurl, undmg, lib }:
 
-let version = "97.0b9";
+let version = "99.0b2";
 in stdenv.mkDerivation rec {
   pname = "firefox-dev-edition";
   inherit version;
