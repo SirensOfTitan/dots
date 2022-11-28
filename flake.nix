@@ -134,6 +134,15 @@
             user = "colepotrocky";
           };
         };
+
+        galactica = darwin.lib.darwinSystem {
+          inputs = inputs;
+          system = "aarch64-darwin";
+          modules = mkDarwinConfig {
+            host = "galactica";
+            user = "cole";
+          };
+        };
       };
     };
 }
