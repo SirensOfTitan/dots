@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: cloze
+# key: cloze
+# --
+:PROPERTIES:
+:ANKI_DECK: General
+:ANKI_NOTE_TYPE: Cloze
+:END:

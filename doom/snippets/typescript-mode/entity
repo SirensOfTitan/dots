@@ -1,0 +1,40 @@
+# -*- mode: snippet -*-
+# name: Kintaba entity
+# key: entity
+# --
+
+import { NewEntity } from "app/database/entities/interface";
+
+import { sql } from "slonik";
+import { getConnection } from "app/database";
+import {
+  allowOmni,
+  alwaysDeny,
+} from "app/database/entities/privacy/rules";
+
+const ${1:Name}EntityBase = NewEntity<$2, $3>({
+  name() {
+    return ${1:Name};
+  },
+
+  id(props) {
+    return props.$4;
+  },
+
+  async findMany(ids) {
+    return getConnection().any<$3>(sql`
+      $5
+    `);
+  },
+
+  privacyPolicy() {
+    return [
+      allowOmni(),
+      alwaysDeny(),
+    ];
+  },
+});
+
+export class ${1:Name}Entity extends ${1:Name}EntityBase {
+
+}
