@@ -3,7 +3,16 @@
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ kubectl ];
+  home.packages = with pkgs; [
+    k9s
+    awscli2
+    aws-vault
+    python39
+    terraform
+    go
+    poetry
+    vscode
+  ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
@@ -49,6 +58,8 @@
       bindkey '^ ' autosuggest-accept
       bindkey '^f' autosuggest-accept
 
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+
       # backwards search like bash.
       bindkey '^R' history-incremental-search-backward
       # commands for vterm inside of emacs
@@ -93,6 +104,9 @@
       ZSH_AUTOSUGGEST_USE_ASYNC = 1;
       # Gray color for autosuggestions
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
+      LD_LIBRARY_PATH = "${lib.makeLibraryPath [ pkgs.postgresql ]}";
+      GOPRIVATE = "rebellion.dev,us.rebellion.dev";
+      PATH = "$PATH:$HOME/.krew/bin";
     };
 
     shellAliases = {

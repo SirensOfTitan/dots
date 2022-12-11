@@ -30,18 +30,21 @@ rec {
   };
 
   environment.systemPackages = with pkgs; [
+    devspace
     leiningen
     clojure
+    dive
+    dbmate
     brotli
     babashka
     parallel
     ripgrep
-    kubectx
     jq
     htmlq
     iina
     gawk
     cachix
+    colima
     tree
     vim
     tree
@@ -55,7 +58,14 @@ rec {
     master.nodePackages.pnpm
     yarn
 
+    cookiecutter
+    python310Packages.python-lsp-server
+    black
+
+    # (postgresql_15.withPackages (p: [ p.postgis ]))
+
     docker
+    docker-compose
     lldb
 
     curl
@@ -73,9 +83,11 @@ rec {
     coreutils
 
     fastmod
+    kubeconform
   ];
 
   homebrew = {
+    brewPrefix = "/opt/homebrew/bin";
     enable = true;
     onActivation = {
       autoUpdate = true;
@@ -96,16 +108,21 @@ rec {
     ];
 
     brews = [
-      "pulumi"
-      "cocoapods"
       "gcc"
+      "postgresql@14"
+      "postgis"
       # "railwaycat/emacsmacport/emacs-mac"
-      "colima"
       "libgccjit"
+      "kubectl"
+      "kubectx"
+      "krew"
+      "helm"
+      "pyright"
     ];
 
     casks = [
       "anki"
+      "superproductivity"
       "cheatsheet"
       "insomnia"
       "shottr"
@@ -119,7 +136,7 @@ rec {
     ];
 
     extraConfig = ''
-      brew "railwaycat/emacsmacport/emacs-mac", args: ["HEAD", "with-native-compilation", "with-librsvg", "with-starter"]
+      brew "railwaycat/emacsmacport/emacs-mac", args: ["with-native-compilation", "with-librsvg", "with-starter"]
     '';
   };
 

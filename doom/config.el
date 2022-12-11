@@ -19,11 +19,11 @@
       user-mail-address "cole@potrocky.com"
       doom-theme 'doom-flatwhite        ; Fave light theme
       ;doom-theme 'doom-city-lights      ; Fave dark theme
-      doom-font (font-spec :family "Iosevka Raisa Medium" :size 16)
-      doom-big-font (font-spec :family "Inter")
-      header-font (font-spec :family "Inter" :size 15)
-      doom-variable-pitch-font (font-spec :family "Besley*" :size 15)
-      doom-serif-font (font-spec :family "Besley*"))
+      doom-font (font-spec :family "Iosevka Raisa Medium" :size 16))
+      ;doom-big-font (font-spec :family "Inter")
+      ;header-font (font-spec :family "Inter" :size 15)
+      ;doom-variable-pitch-font (font-spec :family "Besley*" :size 15)
+      ;doom-serif-font (font-spec :family "Besley*"))
 (setq +format-with-lsp nil)
 (setenv "EDITOR" "emacsclient")
 (setq which-key-idle-delay 0.3)
@@ -301,7 +301,8 @@ window instead."
 
 (use-package! company
   :config
-  (setq company-idle-delay nil))
+  ;; (setq company-idle-delay nil)
+  )
 
 (use-package! company-posframe
   :hook (company-mode . company-posframe-mode))
@@ -419,3 +420,8 @@ window instead."
     (pushnew!
      which-key-replacement-alist
      '(("" . "\\`+?evil-textobj-tree-sitter-function--\\(.*\\)\\(?:.inner\\|.outer\\)") . (nil . "\\1")))))
+
+;; (use-package! python-black
+;;   :demand t
+;;   :after python)
+;; (add-hook! 'python-mode-hook #'python-black-on-save-mode)

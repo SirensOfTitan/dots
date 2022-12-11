@@ -116,6 +116,7 @@
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 (package! latex-preview-pane)
 (package! ox-hugo)
+(package! python-black)
 (package! doom-nebula-theme
   :recipe (:host github
            :repo "pkazmier/doom-nebula-theme"
