@@ -124,12 +124,16 @@
                   vendorSha256 =
                     "sha256-7WqUR5JG+W8vQI62ScTXNA5OLWHQbAlzn4M7eDjOlpE=";
 
-                  #
+                  dontStrip = true;
+                  # we need Apple clang to link modern mac libaries in.
                   buildPhase = ''
                     runHook preBuild
-                    CC=/usr/bin/clang PATH=$PATH:/usr/bin make "VERSION=v${version}" binaries
+                    LD=/usr/bin/clang CC=/usr/bin/clang PATH=$PATH:/usr/bin make "VERSION=v${version}" binaries
+                    /usr/bin/codesign -d --entitlements :- ./_output/bin/limactl
                     runHook postBuild
                   '';
+
+                  installPhase = args.installPhase + "";
                 });
             });
 

@@ -34,6 +34,7 @@ rec {
     cargo
     clojure
     brotli
+    lima
     colima
     babashka
     k6
