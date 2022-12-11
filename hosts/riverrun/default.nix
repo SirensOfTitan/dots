@@ -34,6 +34,7 @@ rec {
     cargo
     clojure
     brotli
+    colima
     babashka
     k6
     parallel
@@ -114,7 +115,6 @@ rec {
       "gcc"
       # "railwaycat/emacsmacport/emacs-mac"
       "youtube-dl"
-      "colima"
       "libgccjit"
     ];
 

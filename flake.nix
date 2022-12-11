@@ -123,6 +123,13 @@
                   inherit src version;
                   vendorSha256 =
                     "sha256-7WqUR5JG+W8vQI62ScTXNA5OLWHQbAlzn4M7eDjOlpE=";
+
+                  #
+                  buildPhase = ''
+                    runHook preBuild
+                    CC=/usr/bin/clang PATH=$PATH:/usr/bin make "VERSION=v${version}" binaries
+                    runHook postBuild
+                  '';
                 });
             });
 
