@@ -7,6 +7,7 @@
 
 (setq-hook! 'js2-mode-hook +format-with-lsp t)
 (setq-hook! 'rjsx-mode-hook +format-with-lsp t)
+(setq-hook! 'typescript-tsx-mode +format-with-lsp t)
 
 (setq leuven-scale-org-agenda-structure nil)
 (setq leuven-scale-volatile-highlight nil)
@@ -425,3 +426,25 @@ window instead."
 ;;   :demand t
 ;;   :after python)
 ;; (add-hook! 'python-mode-hook #'python-black-on-save-mode)
+(setq auth-sources '("~/.authinfo"))
+(after! forge
+  (add-to-list 'forge-alist '("git@gitlab.rebellion.dev" "gitlab.rebellion.dev/api/v4" "gitlab.rebellion.dev" forge-gitlab-repository))
+  (add-to-list 'forge-alist '("git@git.tools.rebellion.dev" "api.git.tools.rebellion.dev" "git.tools.rebellion.dev" forge-github-repository)))
+
+(add-hook 'code-review-mode-hook
+          (lambda ()
+            ;; include *Code-Review* buffer into current workspace
+            (persp-add-buffer (current-buffer))))
+
+(after! magit
+  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
+(setq code-review-github-host "api.git.tools.rebellion.dev/v3")
+(setq code-review-github-graphql-host "api.git.tools.rebellion.dev")
+(setq code-review-github-base-url "git.tools.rebellion.dev")
+
+;; (use-package! tsx-mode
+;;         :config
+;;         (setq auto-mode-alist (delete '("\\.tsx\\'" . typescript-tsx-mode) auto-mode-alist))
+;;         (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode)))
+
+(advice-add #'add-node-modules-path :override #'ignore)

@@ -60,6 +60,7 @@ rec {
     pandoc
     dnsmasq
     mariadb
+    jdk
 
     # for emacs autoformatting
     master.nodejs-16_x

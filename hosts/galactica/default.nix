@@ -31,6 +31,8 @@ rec {
 
   environment.systemPackages = with pkgs; [
     devspace
+    neovim
+    fpp
     leiningen
     clojure
     dive
@@ -44,19 +46,30 @@ rec {
     iina
     gawk
     cachix
-    colima
     tree
     vim
+    glab
     tree
     shellcheck
     gitAndTools.delta
     vollkorn
+    jansson
+
+    git-branchless
+    glpk
+
+    devenv-pkgs.devenv
+
+    gnupg
+    packer
+    chart-testing
+    gh
 
     # for emacs autoformatting
     master.nodejs-16_x
     master.nodePackages.prettier
     master.nodePackages.pnpm
-    yarn
+    master.jfrog-cli
 
     cookiecutter
     python310Packages.python-lsp-server
@@ -67,13 +80,19 @@ rec {
     docker
     docker-compose
     lldb
+    hadolint
 
+    act
     curl
     charles
     shellcheck
     tldr
     nixfmt
     fd
+
+    git-filter-repo
+
+    python310Packages.libcst
 
     # Probably broken until we can get newer Apple SDK libraries
     # inside nix.
@@ -118,9 +137,15 @@ rec {
       "krew"
       "helm"
       "pyright"
+      "colima"
+      "libxmlsec1"
+      "libxml2"
+      "poetry"
+      "reviewdog/tap/reviewdog"
     ];
 
     casks = [
+      "altair-graphql-client"
       "anki"
       "superproductivity"
       "cheatsheet"
@@ -136,7 +161,7 @@ rec {
     ];
 
     extraConfig = ''
-      brew "railwaycat/emacsmacport/emacs-mac", args: ["with-native-compilation", "with-librsvg", "with-starter"]
+      brew "railwaycat/emacsmacport/emacs-mac", args: ["with-native-compilation", "with-librsvg", "with-starter", "HEAD"]
     '';
   };
 

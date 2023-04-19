@@ -6,11 +6,12 @@
   home.packages = with pkgs; [
     k9s
     awscli2
+    ssm-session-manager-plugin
     aws-vault
     python39
     terraform
+    terragrunt
     go
-    poetry
     vscode
   ];
 
@@ -23,9 +24,33 @@
     userName = "Cole Potrocky";
     userEmail = "cole@rebelliondefense.com";
 
-    iniContent.pull.rebase = "true";
-    iniContent.merge.ff = "no";
-    iniContent.merge.conflictstyle = "diff3";
+    iniContent = {
+      # for 1password-based git commit signing.
+      commit.gpgSign = true;
+      gpg.format = "ssh";
+      gpg.ssh.allowedSignersFile = "/Users/cole/.config/git/allowed_signers";
+      gpg."ssh".program =
+        "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      user.signingkey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILvvWufvRldrjYM/psagvoWqqz7gR42+9va9OlmHq9va";
+
+      # For magit-forge
+      gitlab."gitlab.rebellion.dev/api/v4" = { user = "cole"; };
+
+      # For code review
+      github."git.tools.rebellion.dev".user = "cole";
+      github."api.git.tools.rebellion.dev".user = "cole";
+      github."api.git.tools.rebellion.dev/graphql".user = "cole";
+      github."api.git.tools.rebellion.dev/v3".user = "cole";
+
+      github."git.tools.rebellion.dev/api".user = "cole";
+
+      github."git.tools.rebellion.dev/api/v3".user = "cole";
+
+      pull.rebase = "true";
+      merge.ff = "no";
+      merge.conflictstyle = "diff3";
+    };
   };
 
   programs.zsh = {
@@ -57,6 +82,8 @@
       # keybindings for autosuggest plugin.
       bindkey '^ ' autosuggest-accept
       bindkey '^f' autosuggest-accept
+
+      alias gb="git-branchless"
 
       eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -107,6 +134,7 @@
       LD_LIBRARY_PATH = "${lib.makeLibraryPath [ pkgs.postgresql ]}";
       GOPRIVATE = "rebellion.dev,us.rebellion.dev";
       PATH = "$PATH:$HOME/.krew/bin";
+      LSP_USE_PLISTS = "true";
     };
 
     shellAliases = {
