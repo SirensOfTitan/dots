@@ -30,8 +30,10 @@ rec {
   };
 
   environment.systemPackages = with pkgs; [
+    tflint
     devspace
     neovim
+    cloc
     fpp
     leiningen
     clojure
@@ -66,7 +68,7 @@ rec {
     gh
 
     # for emacs autoformatting
-    master.nodejs-16_x
+    master.nodejs-18_x
     master.nodePackages.prettier
     master.nodePackages.pnpm
     master.jfrog-cli
@@ -109,8 +111,8 @@ rec {
     brewPrefix = "/opt/homebrew/bin";
     enable = true;
     onActivation = {
-      autoUpdate = true;
-      upgrade = true;
+      autoUpdate = false;
+      upgrade = false;
       cleanup = "zap";
     };
     global = {
@@ -142,6 +144,7 @@ rec {
       "libxml2"
       "poetry"
       "reviewdog/tap/reviewdog"
+      "kompose"
     ];
 
     casks = [

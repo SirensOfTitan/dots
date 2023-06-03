@@ -5,9 +5,13 @@
 
 (defvar header-font nil)
 
-(setq-hook! 'js2-mode-hook +format-with-lsp t)
-(setq-hook! 'rjsx-mode-hook +format-with-lsp t)
-(setq-hook! 'typescript-tsx-mode +format-with-lsp t)
+;; (setq-hook! 'js2-mode-hook +format-with-lsp t)
+;; (setq-hook! 'rjsx-mode-hook +format-with-lsp t)
+;; (setq-hook! 'typescript-tsx-mode +format-with-lsp t)
+(setq-hook! 'js-mode-hook +format-with-lsp nil)
+(setq-hook! 'js-mode-hook +format-with 'prettier)
+(setq-hook! 'typescript-tsx-mode +format-with-lsp nil)
+(setq-hook! 'typescript-tsx-mode +format-with 'prettier)
 
 (setq leuven-scale-org-agenda-structure nil)
 (setq leuven-scale-volatile-highlight nil)
@@ -441,10 +445,5 @@ window instead."
 (setq code-review-github-host "api.git.tools.rebellion.dev/v3")
 (setq code-review-github-graphql-host "api.git.tools.rebellion.dev")
 (setq code-review-github-base-url "git.tools.rebellion.dev")
-
-;; (use-package! tsx-mode
-;;         :config
-;;         (setq auto-mode-alist (delete '("\\.tsx\\'" . typescript-tsx-mode) auto-mode-alist))
-;;         (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode)))
 
 (advice-add #'add-node-modules-path :override #'ignore)

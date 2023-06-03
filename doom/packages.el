@@ -127,6 +127,5 @@
 (when (featurep! :editor evil +everywhere)
   (package! evil-textobj-tree-sitter))
 
-(package! tsi :recipe (:host github :repo "orzechowskid/tsi.el" :branch "main"))
-(package! tsx-mode :recipe (:host github :repo "orzechowskid/tsx-mode.el" :branch "master"))
 (package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
+(package! prettier-js)
