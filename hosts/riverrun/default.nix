@@ -2,7 +2,7 @@
 
 rec {
   system.stateVersion = 4;
-  nix.package = pkgs.master.nixVersions.nix_2_11;
+  nix.package = pkgs.master.nixVersions.nix_2_16;
   nix.configureBuildUsers = true;
 
   services.nix-daemon.enable = true;
@@ -30,69 +30,59 @@ rec {
   };
 
   environment.systemPackages = with pkgs; [
-    leiningen
-    master.cargo
-    clojure
-    brotli
-    lima
-    colima
-    vscode
-    neovim
     babashka
-    k6
-    parallel
-    ripgrep
-    kubectx
+    brotli
+    cachix
+    charles
+    charles
+    clojure
+    cloudflared
+    cmake
+    coreutils
+    curl
+    dnsmasq
+    docker
+    fastmod
+    fd
     ffmpeg
-    jq
-    python310Packages.libcst
-    master.nodePackages.pyright
+    gawk
+    gitAndTools.delta
     htmlq
     iina
     imagemagick
-    gawk
-    cachix
+    jdk
+    jq
+    k6
+    k9s
+    kubectx
+    leiningen
+    lldb
+    macfuse-stubs
+    mariadb
+    master.clojure-lsp
+    master.nix-index
+    master.nodePackages.pnpm
+    master.nodePackages.prettier
+    master.nodePackages.pyright
+    master.nodejs-18_x
+    neovim
+    nextdns
+    nixfmt
+    pandoc
+    parallel
+    python310Packages.libcst
+    rclone
+    ripgrep
+    scdl
+    shellcheck
+    time
+    tldr
+    tree
     tree
     vim
-    tree
-    shellcheck
-    gitAndTools.delta
     vollkorn
-    rclone
-    macfuse-stubs
-    nextdns
-    pandoc
-    dnsmasq
-    mariadb
-    jdk
-
-    # for emacs autoformatting
-    master.nodejs-16_x
-    master.nodePackages.prettier
-    master.nodePackages.pnpm
+    vscode
     yarn
-    cloudflared
-    k9s
-
-    docker
-    lldb
-
-    curl
-    charles
-    shellcheck
-    tldr
-    nixfmt
-    fd
-
-    # Probably broken until we can get newer Apple SDK libraries
-    # inside nix.
-    # emacs-mac
-    cmake
-    time
-    coreutils
-
-    fastmod
-    charles
   ];
 
   homebrew = {
@@ -116,6 +106,7 @@ rec {
     ];
 
     brews = [
+      "colima"
       "pulumi"
       "cocoapods"
       "gcc"
@@ -125,8 +116,6 @@ rec {
     ];
 
     casks = [
-      "fig"
-      "microsoft-edge"
       "anki"
       "cheatsheet"
       "rocket"
@@ -137,11 +126,6 @@ rec {
       "shottr"
       "transmission"
       # Has some permission issues in macOS for the nix version.
-      "iterm2"
-      # 1Password's browser integration requires both the 1Password binary
-      # and the Firefox binary to live in /Applications, so just let homebrew
-      # manage firefox
-      "firefox-developer-edition"
       "signal"
       "spotify"
       "telegram"

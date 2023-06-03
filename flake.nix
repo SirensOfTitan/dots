@@ -15,6 +15,8 @@
 
     nur.url = "github:nix-community/NUR";
 
+    mozilla-overlay.url = "github:mozilla/nixpkgs-mozilla";
+
     # language learning
     mpvacious = {
       url = "github:Ajatt-Tools/mpvacious";
@@ -78,7 +80,7 @@
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-master, devenv, darwin, home-manager
-    , nur, mpvacious, git-branchless, ... }:
+    , nur, mpvacious, git-branchless, mozilla-overlay, ... }:
     let
       nixpkgsConfig = with inputs; {
         config = {
@@ -95,6 +97,7 @@
         };
         overlays = [
           git-branchless.overlay
+          mozilla-overlay.overlays.rust
           nur.overlay
           (final: prev: {
             config.allowUnfree = true;
@@ -102,68 +105,6 @@
 
             master = nixpkgs-master.legacyPackages.${prev.system};
             devenv-pkgs = devenv.packages.${prev.system};
-
-            # lima = prev.lima.overrideAttrs (prevp: {
-            #   version = "0.14.0-local";
-            #   src = prev.fetchFromGitHub {
-            #     owner = "lima-vm";
-            #     repo = "lima";
-            #     rev = "0e431c5e6d981d04536b140b1bf08b82da3d71cf";
-            #     sha256 = "sha256-B2l2OeKqRXMZA8mDdFzeuOsTh9HxCZGSNxQBoeOmAm8=";
-            #   };
-            #   vendorSha256 = prev.lib.fakeSha256;
-            # });
-
-            # lima = let
-            #   version = "0.14.0-master";
-            #   src = prev.fetchFromGitHub {
-            #     owner = "lima-vm";
-            #     repo = "lima";
-            #     rev = "0e431c5e6d981d04536b140b1bf08b82da3d71cf";
-            #     sha256 = "sha256-B2l2OeKqRXMZA8mDdFzeuOsTh9HxCZGSNxQBoeOmAm8=";
-            #   };
-            # in (prev.lima.override rec {
-            #   buildGoModule = args:
-            #     prev.buildGoModule (args // {
-            #       inherit src version;
-            #       vendorSha256 =
-            #         "sha256-7WqUR5JG+W8vQI62ScTXNA5OLWHQbAlzn4M7eDjOlpE=";
-
-            #       dontStrip = true;
-            #       # we need Apple clang to link modern mac libaries in.
-            #       buildPhase = ''
-            #         runHook preBuild
-            #         LD=/usr/bin/clang CC=/usr/bin/clang PATH=$PATH:/usr/bin make "VERSION=v${version}" binaries
-            #         /usr/bin/codesign -d --entitlements :- ./_output/bin/limactl
-            #         runHook postBuild
-            #       '';
-
-            #       installPhase = args.installPhase + "";
-            #     });
-            # });
-
-            # colima = let
-            #   version = "0.4.6-vz";
-            #   src = prev.fetchFromGitHub {
-            #     owner = "abiosoft";
-            #     repo = "colima";
-            #     # Head of support-vz branch.
-            #     rev = "f959232a2322e4b61217ecba0b92ef4618783cbf";
-            #     sha256 = "sha256-1VDr/zJfTNblURTTArAED9xZhAZy6Qu48+5GUxA8ArE=";
-            #     leaveDotGit = true;
-            #     postFetch = ''
-            #       git -C $out rev-parse --short HEAD > $out/.git-revision
-            #       rm -rf $out/.git
-            #     '';
-            #   };
-            # in (prev.colima.override rec {
-            #   buildGoModule = args:
-            #     prev.buildGoModule (args // {
-            #       inherit src version;
-            #       vendorSha256 =
-            #         "sha256-v0U7TorUwOtBzBQ/OQQSAX6faDI1IX/IDIJnY8UFsu8=";
-            #     });
-            # });
 
             firefox-dev-edition =
               prev.callPackage ./overlays/firefox-dev-edition.nix { };

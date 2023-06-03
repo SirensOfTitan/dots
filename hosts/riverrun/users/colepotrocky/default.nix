@@ -3,117 +3,10 @@
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ exercism heroku kubectl fira ];
+  home.packages = with pkgs; [ exercism heroku kubectl fira libtool ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
-
-  programs.firefox = {
-    enable = true;
-    package = pkgs.hello;
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      ublock-origin
-      localcdn
-
-      old-reddit-redirect
-      reddit-enhancement-suite
-      metamask
-
-      react-devtools
-    ];
-
-    profiles.default = {
-      id = 0;
-      settings = {
-        "app.update.auto" = false;
-        # managed by nix.
-        "app.update.enabled" = false;
-        "signon.rememberSignons" = false;
-        "dom.webnotifications.enabled" = false;
-        "geo.enabled" = false;
-        "geo.wifi.uri" =
-          "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
-        "geo.wifi.logging.enabled" = false;
-        "device.sensors.enabled" = false;
-        "dom.mozTCPSocket.enabled" = false;
-        "dom.netinfo.enabled" = false;
-        "dom.battery.enabled" = false;
-        "dom.telephony.enabled" = false;
-        "media.peerconnection.enabled" = false;
-        "media.webspeech.recognition.enable" = false;
-        "media.webspeech.synth.enabled" = false;
-        "media.peerconnection.ice.default_address_only" = true;
-        "media.peerconnection.ice.no_host" = true;
-        "media.navigator.enabled" = false;
-        "media.navigator.video.enabled" = false;
-        "media.getusermedia.screensharing.enabled" = false;
-        "media.getusermedia.audiocapture.enabled" = false;
-        "devtools.theme" = "dark";
-        "browser.shell.checkDefaultBrowser" = false;
-        "browser.newtabpage.enabled" = false;
-        "browser.newtab.url" = "about:blank";
-        "startup.homepage_override_url" = "about:blank";
-        "browser.newtabpage.activity-stream.enabled" = false;
-        "browser.newtabpage.enhanced" = false;
-        "browser.newtab.preload" = false;
-        "browser.newtabpage.directory.ping" = "";
-        "browser.newtabpage.directory.source" = "data:text/plain,{}";
-        "browser.urlbar.suggest.searches" = false;
-        "browser.search.suggest.enabled" = false;
-        "browser.search.update" = false;
-        "browser.urlbar.shortcuts.bookmarks" = false;
-        "browser.urlbar.groupLabels.enabled" = false;
-        "browser.urlbar.shortcuts.history" = false;
-        "browser.urlbar.shortcuts.tabs" = false;
-        "browser.urlbar.showSearchSuggestionsFirst" = false;
-        "browser.casting.enabled" = false;
-        "pdfjs.disabled" = true;
-        "extensions.htmlaboutaddons.recommendations.enabled" = false;
-        "extensions.htmlaboutaddons.discover.enabled" = false;
-        "extensions.pocket.enabled" = false;
-        "browser.pocket.enabled" = false;
-        "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
-        "app.normandy.enabled" = false;
-        "app.normandy.api_url" = "";
-        "extensions.shield-recipe-client.enabled" = false;
-        "network.predictor.enabled" = false;
-        "app.shield.optoutstudies.enabled" = false;
-        "beacon.enabled" = false;
-        "browser.send_pings" = false;
-        "browser.send_pings.require_same_host" = true;
-        "browser.fixup.alternate.enabled" = false;
-        "network.manage-offline-status" = false;
-        "security.mixed_content.block_active_content" = true;
-        "security.mixed_content.block_display_content" = true;
-        "network.jar.open-unsafe-types" = false;
-        "network.allow-experiments" = false;
-        "camera.control.face_detection.enabled" = false;
-        "toolkit.telemetry.enabled" = false;
-        "security.xpconnect.plugin.unrestricted" = false;
-        "security.fileuri.strict_origin_policy" = true;
-        "extensions.getAddons.cache.enabled" = false;
-        "lightweightThemes.update.enabled" = false;
-        "plugin.state.flash" = 0;
-        "plugin.state.java" = 0;
-        "breakpad.reportURL" = "";
-        "browser.tabs.crashReporting.sendReport" = false;
-        "browser.crashReports.unsubmittedCheck.enabled" = false;
-        "browser.uitour.enabled" = false;
-        "browser.startup.blankWindow" = false;
-        # let nix manage this.
-        "extensions.update.enabled" = false;
-        "toolkit.telemetry.unified" = false;
-        "toolkit.telemetry.archive.enabled" = false;
-        "experiments.supported" = false;
-        "experiments.enabled" = false;
-        "experiments.manifest.uri" = "";
-        "datareporting.healthreport.uploadEnabled" = false;
-        "datareporting.healthreport.service.enabled" = false;
-        "datareporting.policy.dataSubmissionEnabled" = false;
-        "browser.discovery.enabled" = false;
-      };
-    };
-  };
 
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
@@ -142,11 +35,60 @@
     };
   };
 
+  programs.alacritty = {
+    enable = true;
+    settings = ''
+      font:
+        normal:
+          family: Iosevka Raisa
+          style: Regular
+        italic:
+          family: Iosevka Raisa
+          style: "Italic"
+        size: 14.0
+        use_thin_strokes: true
+      # Colors (Solarized Light)
+      window:
+        padding:
+          x: 8
+          y: 8
+        dynamic_padding: true
+      colors:
+        # Default colors
+        primary:
+          background: '0xfdf6e3'
+          foreground: '0x586e75'
+
+        # Normal colors
+        normal:
+          black:   '0x073642'
+          red:     '0xdc322f'
+          green:   '0x859900'
+          yellow:  '0xb58900'
+          blue:    '0x268bd2'
+          magenta: '0xd33682'
+          cyan:    '0x2aa198'
+          white:   '0xeee8d5'
+
+        # Bright colors
+        bright:
+          black:   '0x002b36'
+          red:     '0xcb4b16'
+          green:   '0x586e75'
+          yellow:  '0x657b83'
+          blue:    '0x839496'
+          magenta: '0x6c71c4'
+          cyan:    '0x93a1a1'
+          white:   '0xfdf6e3'
+      draw_bold_text_with_bright_colors: false
+    '';
+  };
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
     enableCompletion = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
     autocd = true;
     defaultKeymap = "viins";
 
@@ -203,17 +145,33 @@
       }
 
       ff() {
-          vterm_cmd find-file "$(realpath "''${@:-.}")"
+          # This function will open the file in emacsclient, if we're in emacs,
+          # otherwise will fall back to editor.
+          if [ -n "$INSIDE_EMACS" ]; then
+              vterm_cmd find-file "$(realpath "''${@:-.}")"
+          else
+              $EDITOR "$(realpath "''${@:-.}")"
+          fi
       }
 
       # Move to root of projectile project.
       pr() {
-          vterm_cmd projectile-project-root
+          # vterm_cmd only exists in an emacs context, so we need to determine if
+          # we're in emacs to run this, and if we're not, fall back to git rev-parse cd:
+          if [ -n "$INSIDE_EMACS" ]; then
+              vterm_cmd projectile-project-root
+          else
+              cd "$(git rev-parse --show-toplevel)" || exit 1
+          fi
       }
     '';
 
-    sessionVariables = {
+    sessionVariables = let editor = "${pkgs.neovim}/bin/nvim";
+    in {
+      VISUAL = editor;
+      EDITOR = editor;
       ZSH_AUTOSUGGEST_USE_ASYNC = 1;
+      PATH = "$HOME/.cargo/bin:$PATH";
       # Gray color for autosuggestions
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
     };
@@ -221,6 +179,8 @@
     shellAliases = {
       "nix!" = "(cd ~/dots && darwin-rebuild switch --flake .)";
       "reload!" = "source $HOME/.zshrc";
+      "drive" = "cd ~/Library/Mobile\\ Documents/com~apple~CloudDocs/";
+      "glibtool" = "${pkgs.libtool}/bin/libtool";
     };
 
     plugins = with self.inputs;
