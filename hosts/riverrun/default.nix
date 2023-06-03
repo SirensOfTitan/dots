@@ -31,11 +31,13 @@ rec {
 
   environment.systemPackages = with pkgs; [
     leiningen
-    cargo
+    master.cargo
     clojure
     brotli
     lima
     colima
+    vscode
+    neovim
     babashka
     k6
     parallel
@@ -43,6 +45,8 @@ rec {
     kubectx
     ffmpeg
     jq
+    python310Packages.libcst
+    master.nodePackages.pyright
     htmlq
     iina
     imagemagick

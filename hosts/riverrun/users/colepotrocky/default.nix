@@ -3,7 +3,7 @@
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ exercism heroku kubectl ];
+  home.packages = with pkgs; [ exercism heroku kubectl fira ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
