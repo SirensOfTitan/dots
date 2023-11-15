@@ -82,7 +82,7 @@
   outputs = inputs@{ self, nixpkgs, nixpkgs-master, devenv, darwin, home-manager
     , nur, mpvacious, git-branchless, mozilla-overlay, ... }:
     let
-      nixpkgsConfig = with inputs; {
+      nixpkgsConfig = {
         config = {
           allowUnfree = true;
           allowBroken = true;
@@ -124,11 +124,11 @@
           users.users.${user}.home = "/Users/${user}";
           home-manager.useUserPackages = true;
           home-manager.useGlobalPkgs = true;
-          home-manager.users.${user} = with self.homeManagerModules; {
+          home-manager.users.${user} = {
             imports = [ (./. + "/hosts/${host}/users/${user}") ];
           };
 
-          home-manager.extraSpecialArgs = rec { inherit self; };
+          home-manager.extraSpecialArgs = { inherit self; };
         }
       ];
     in {

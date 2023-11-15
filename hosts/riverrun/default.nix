@@ -1,14 +1,50 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, lib, nixpkgs, inputs, ... }:
 
-rec {
+let
+  linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] pkgs.system;
+  darwin-builder = lib.nixosSystem {
+    system = linuxSystem;
+    modules = [
+      "${inputs.nixpkgs}/nixos/modules/profiles/macos-builder.nix"
+      {
+        virtualisation.host.pkgs = pkgs;
+        system.nixos.revision = lib.mkForce null;
+      }
+    ];
+  };
+in rec {
   system.stateVersion = 4;
   nix.package = pkgs.master.nixVersions.nix_2_16;
   nix.configureBuildUsers = true;
 
   services.nix-daemon.enable = true;
 
+  nix.distributedBuilds = true;
+  nix.buildMachines = [{
+    protocol = "ssh-ng";
+    hostName = "ssh://builder@localhost";
+    system = linuxSystem;
+    maxJobs = 4;
+    sshKey = "/etc/nix/builder_ed25519";
+    supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
+  }];
+
+  launchd.daemons.darwin-builder = {
+    command =
+      "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
+    serviceConfig = {
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/var/log/darwin-builder.log";
+      StandardErrorPath = "/var/log/darwin-builder.log";
+      WorkingDirectory = "/etc/nix/";
+    };
+  };
+
   nix.extraOptions = ''
     experimental-features = nix-command flakes
+    extra-trusted-users = colepotrocky
+    builders = ssh-ng://builder@linux-builder aarch64-linux /etc/nix/builder_ed25519 4 - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
   '';
 
   nix.settings.trusted-substituters = [
@@ -34,14 +70,27 @@ rec {
     brotli
     cachix
     charles
-    charles
     clojure
     cloudflared
     cmake
-    coreutils
+
+    master.flyctl
+
+    master.dprint
+
+    # Things needed for emacs to run properly.
+    # nix LSP: Oh so needed.
+    master.nil
+    master.dockfmt
+    master.pngpaste
+    master.darwin.libiconv
+
+    master.difftastic
     curl
     dnsmasq
     docker
+    shfmt
+    (master.emacs29-macport.override (args: { withNativeCompilation = true; }))
     fastmod
     fd
     ffmpeg
@@ -55,22 +104,23 @@ rec {
     k6
     k9s
     kubectx
+    platformsh
+    master.clj-kondo
+    yt-dlp
     leiningen
     lldb
-    macfuse-stubs
-    mariadb
     master.clojure-lsp
     master.nix-index
     master.nodePackages.pnpm
     master.nodePackages.prettier
     master.nodePackages.pyright
     master.nodejs-18_x
+    (master.python3.withPackages (p: with p; [ numpy sentencepiece ]))
     neovim
     nextdns
     nixfmt
     pandoc
     parallel
-    python310Packages.libcst
     rclone
     ripgrep
     scdl
@@ -81,14 +131,17 @@ rec {
     tree
     vim
     vollkorn
+    watchman
     vscode
     yarn
+    ngrok
+    master.helix
   ];
 
   homebrew = {
     enable = true;
     onActivation = {
-      autoUpdate = true;
+      autoUpdate = false;
       upgrade = true;
       cleanup = "zap";
     };
@@ -99,28 +152,21 @@ rec {
 
     taps = [
       "homebrew/bundle"
+      "oven-sh/bun"
       "homebrew/cask"
       "homebrew/cask-versions"
       "homebrew/core"
       "railwaycat/emacsmacport"
     ];
 
-    brews = [
-      "colima"
-      "pulumi"
-      "cocoapods"
-      "gcc"
-      # "railwaycat/emacsmacport/emacs-mac"
-      "youtube-dl"
-      "libgccjit"
-    ];
+    brews = [ "colima" "pulumi" "cocoapods" "bun" "editorconfig" "coreutils" ];
 
     casks = [
       "anki"
+      "microsoft-office"
       "cheatsheet"
       "rocket"
       "calibre"
-      "insomnia"
       "kindle"
       "slack"
       "shottr"
@@ -132,10 +178,6 @@ rec {
       "zoom"
       "vlc"
     ];
-
-    extraConfig = ''
-      brew "railwaycat/emacsmacport/emacs-mac", args: ["HEAD", "with-native-compilation", "with-librsvg", "with-starter"]
-    '';
   };
 
   # needed to ensure nix env is properly sourced.

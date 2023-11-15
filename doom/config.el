@@ -5,30 +5,23 @@
 
 (defvar header-font nil)
 
-;; (setq-hook! 'js2-mode-hook +format-with-lsp t)
-;; (setq-hook! 'rjsx-mode-hook +format-with-lsp t)
-;; (setq-hook! 'typescript-tsx-mode +format-with-lsp t)
-(setq-hook! 'js-mode-hook +format-with-lsp nil)
-(setq-hook! 'js-mode-hook +format-with 'prettier)
-(setq-hook! 'typescript-tsx-mode +format-with-lsp nil)
-(setq-hook! 'typescript-tsx-mode +format-with 'prettier)
+(set-formatter! 'dprint '("dprint" "fmt" "--stdin" filepath) :modes '(typescript-tsx-mode typescript-mode javascript-mode css-mode))
 
-(setq leuven-scale-org-agenda-structure nil)
-(setq leuven-scale-volatile-highlight nil)
-(setq leuven-scale-outline-headlines nil)
+;; Workaround for https://github.com/doomemacs/doomemacs/issues/7532 in MacOS 14 Sonoma
+(add-hook 'doom-after-init-hook (lambda () (tool-bar-mode 1) (tool-bar-mode 0)))
+
 ;; Annoying when using org-roam
 (setq auto-save-default nil)
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Cole Potrocky"
       user-mail-address "cole@potrocky.com"
-      doom-theme 'doom-flatwhite        ; Fave light theme
-      ;doom-theme 'doom-city-lights      ; Fave dark theme
-      doom-font (font-spec :family "Iosevka Raisa Medium" :size 16))
-      ;doom-big-font (font-spec :family "Inter")
-      ;header-font (font-spec :family "Inter" :size 15)
-      ;doom-variable-pitch-font (font-spec :family "Besley*" :size 15)
-      ;doom-serif-font (font-spec :family "Besley*"))
+      doom-theme 'doom-moonlight
+      doom-font (font-spec :family "Iosevka Raisa Medium" :size 16)
+      doom-big-font (font-spec :family "Inter")
+      header-font (font-spec :family "Inter" :size 15)
+      doom-variable-pitch-font (font-spec :family "Vollkorn" :size 15)
+      doom-serif-font (font-spec :family "Vollkorn"))
 (setq +format-with-lsp nil)
 (setenv "EDITOR" "emacsclient")
 (setq which-key-idle-delay 0.3)
@@ -62,7 +55,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Brain/")
+(setq org-directory "~/org")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -70,13 +63,13 @@
 
 (after! vterm
   (add-to-list 'vterm-eval-cmds '("projectile-project-root"
-              (lambda ()
-                (let* ((project-root (projectile-project-root)))
-                  (if project-root
-                      (progn
-                        (vterm-send-string (format "cd \"%s\"" project-root))
-                        (vterm-send-return))
-                    (message "Not in a projectile project.")))))))
+                                  (lambda ()
+                                    (let* ((project-root (projectile-project-root)))
+                                      (if project-root
+                                          (progn
+                                            (vterm-send-string (format "cd \"%s\"" project-root))
+                                            (vterm-send-return))
+                                        (message "Not in a projectile project.")))))))
 
 (use-package! deadgrep
   :if (executable-find "rg")
@@ -175,7 +168,6 @@
 (add-hook 'org-mode-hook #'org-appear-mode)
 
 (add-hook 'org-mode-hook #'doom-disable-line-numbers-h)
-(add-hook 'org-mode-hook 'olivetti-mode)
 
 (after! org
   (setq org-attach-dir-relative t))
@@ -249,24 +241,7 @@ window instead."
                                                  :point (nth 2 random-row))
                            other-window))))
 
-
-(use-package! org-roam-protocol
-  :after org-protocol)
 (setq enable-local-variables t)
-
-;; (use-package! org-roam-server
-;;   :config
-;;   (setq org-roam-server-host "127.0.0.1"
-;;         org-roam-server-port 8080
-;;         org-roam-server-authenticate nil
-;;         org-roam-server-export-inline-images t
-;;         org-roam-server-serve-files nil
-;;         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-;;         org-roam-server-network-poll t
-;;         org-roam-server-network-arrows nil
-;;         org-roam-server-network-label-truncate t
-;;         org-roam-server-network-label-truncate-length 60
-;;         org-roam-server-network-label-wrap-length 20))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -306,88 +281,18 @@ window instead."
 
 (use-package! company
   :config
-  ;; (setq company-idle-delay nil)
-  )
-
-(use-package! company-posframe
-  :hook (company-mode . company-posframe-mode))
+  (setq company-idle-delay nil))
 
 (setq auth-sources '("~/.authinfo.gpg"))
 
-(defun my-fetch-password (&rest params)
-  (require 'auth-source)
-  (let ((match (car (apply #'auth-source-search params))))
-    (if match
-        (let ((secret (plist-get match :secret)))
-          (if (functionp secret)
-              (funcall secret)
-            secret))
-      (error "Password not found for %S" params))))
-
-(defun my-nickserv-password (server)
-  (my-fetch-password :user "colep" :host "irc.libera.chat"))
-
 (after! circe
   (set-irc-server! "irc.libera.chat"
-                   `(:tls t
-                     :port 6697
-                     :nick "colep"
-                     :sasl-password my-nickserver-password)))
+    `(:tls t
+      :port 6697
+      :nick "colep"
+      :sasl-password my-nickserver-password)))
 
-(setq-hook! 'web-mode-hook +format-with 'prettier-prettify)
-
-(use-package! fancy-dabbrev
-  :hook
-  (after-init . global-fancy-dabbrev-mode)
-  :bind (("C-<enter>" . fancy-dabbrev-expand)))
-
-(use-package! websocket
-    :after org-roam)
-
-(use-package! org-roam-ui
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (org-mode . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
-
-(use-package! anki-editor
-  :after org
-  :config
-  (setq anki-editor-create-decks t))
-
-;; (use-package! org-visual-outline
-;;   :hook (org-mode . org-dynamic-bullets-mode))
-
-(map! :localleader
-      :map org-mode-map
-      (:prefix ("a" . "Anki")
-       :desc "Push" "p" 'anki-editor-push-notes
-       :desc "Retry" "r" 'anki-editor-retry-failure-notes
-       :desc "New note" "n" 'anki-editor-insert-note
-       :desc "Cloze dwim" "d" 'anki-editor-cloze-dwim
-       :desc "Cloze region" "r" 'anki-editor-cloze-region))
-
-(use-package! latex-preview-pane
-  :config
-  (setq pdf-latex-command "xelatex"))
-
-(use-package! lsp-sourcekit
-  :after lsp-mode
-  :config
-  (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "xcrun --find sourcekit-lsp"))))
-
-;; Blocked until m1 support lands for tree-sitter binary.
-(use-package! tree-sitter
-  :hook
-  (prog-mode . global-tree-sitter-mode)
-  :config
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+(setq-hook! 'web-mode-hook +format-with 'dprint)
 
 (defvar +tree-sitter-inner-text-objects-map (make-sparse-keymap))
 (defvar +tree-sitter-outer-text-objects-map (make-sparse-keymap))
@@ -405,20 +310,20 @@ window instead."
   :config
 
   (map! (:map +tree-sitter-inner-text-objects-map
-         "a" (evil-textobj-tree-sitter-get-textobj "parameter.inner")
-         "f" (evil-textobj-tree-sitter-get-textobj "function.inner")
-         "F" (evil-textobj-tree-sitter-get-textobj "call.inner")
-         "C" (evil-textobj-tree-sitter-get-textobj "class.inner")
-         "i" (evil-textobj-tree-sitter-get-textobj "conditional.inner")
-         "l" (evil-textobj-tree-sitter-get-textobj "loop.inner"))
+              "a" (evil-textobj-tree-sitter-get-textobj "parameter.inner")
+              "f" (evil-textobj-tree-sitter-get-textobj "function.inner")
+              "F" (evil-textobj-tree-sitter-get-textobj "call.inner")
+              "C" (evil-textobj-tree-sitter-get-textobj "class.inner")
+              "i" (evil-textobj-tree-sitter-get-textobj "conditional.inner")
+              "l" (evil-textobj-tree-sitter-get-textobj "loop.inner"))
         (:map +tree-sitter-outer-text-objects-map
-         "a" (evil-textobj-tree-sitter-get-textobj "parameter.outer")
-         "f" (evil-textobj-tree-sitter-get-textobj "function.outer")
-         "F" (evil-textobj-tree-sitter-get-textobj "call.outer")
-         "C" (evil-textobj-tree-sitter-get-textobj "class.outer")
-         "c" (evil-textobj-tree-sitter-get-textobj "comment.outer")
-         "i" (evil-textobj-tree-sitter-get-textobj "conditional.outer")
-         "l" (evil-textobj-tree-sitter-get-textobj "loop.outer")))
+              "a" (evil-textobj-tree-sitter-get-textobj "parameter.outer")
+              "f" (evil-textobj-tree-sitter-get-textobj "function.outer")
+              "F" (evil-textobj-tree-sitter-get-textobj "call.outer")
+              "C" (evil-textobj-tree-sitter-get-textobj "class.outer")
+              "c" (evil-textobj-tree-sitter-get-textobj "comment.outer")
+              "i" (evil-textobj-tree-sitter-get-textobj "conditional.outer")
+              "l" (evil-textobj-tree-sitter-get-textobj "loop.outer")))
 
   (after! which-key
     (setq which-key-allow-multiple-replacements t)
@@ -430,10 +335,7 @@ window instead."
 ;;   :demand t
 ;;   :after python)
 ;; (add-hook! 'python-mode-hook #'python-black-on-save-mode)
-(setq auth-sources '("~/.authinfo"))
-(after! forge
-  (add-to-list 'forge-alist '("git@gitlab.rebellion.dev" "gitlab.rebellion.dev/api/v4" "gitlab.rebellion.dev" forge-gitlab-repository))
-  (add-to-list 'forge-alist '("git@git.tools.rebellion.dev" "api.git.tools.rebellion.dev" "git.tools.rebellion.dev" forge-github-repository)))
+                                        ;(setq auth-sources '("~/.authinfo"))
 
 (add-hook 'code-review-mode-hook
           (lambda ()
@@ -442,8 +344,4 @@ window instead."
 
 (after! magit
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
-(setq code-review-github-host "api.git.tools.rebellion.dev/v3")
-(setq code-review-github-graphql-host "api.git.tools.rebellion.dev")
-(setq code-review-github-base-url "git.tools.rebellion.dev")
 
-(advice-add #'add-node-modules-path :override #'ignore)
