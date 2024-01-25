@@ -90,7 +90,7 @@
           nix.gc = {
             automatic = true;
             dates = "weekly";
-            options = "--delete-older-than 30d";
+            options = "--delete-older-than 7d";
           };
           nix.autoOptimiseStore = true;
           nix.trustedUsers = [ "root" "@wheel" ];
@@ -112,6 +112,9 @@
               (prev.callPackage ./overlays/charles.nix { })
             else
               prev.charles;
+
+            emacs-lsp-booster =
+              prev.callPackage ./overlays/emacs-lsp-booster.nix { };
           })
         ];
       };

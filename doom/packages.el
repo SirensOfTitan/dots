@@ -40,6 +40,7 @@
 ;; Use `:pin' to specify a particular commit to install.
                                         ;(package! builtin-package :pin "1a2b3c4d5e")
 
+(package! kaolin-themes)
 (package! graphql-mode)
 (package! deadgrep)
 (package! magit-delta
@@ -75,6 +76,16 @@
            :branch "master"
            :files ("*.el")))
 
+(package! org-anki
+  :recipe (:host github
+           :repo "eyeinsky/org-anki"
+           :branch "master"))
+
+(package! ultra-scroll-mac
+  :recipe (:host github
+           :repo "jdtsmith/ultra-scroll-mac"
+           :branch "main"))
+
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 (package! latex-preview-pane)
 (package! ox-hugo)
@@ -84,4 +95,11 @@
   (package! evil-textobj-tree-sitter))
 
                                         ;(package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
-(package! prettier-js)
+(package! company :disable t :ignore t)
+(package! corfu
+  :recipe (:files (:defaults "extensions/*.el")))
+(package! orderless)
+(package! cape)
+ (package! cape-yasnippet
+   :recipe (:host github :repo "elken/cape-yasnippet"))
+(package! cape)

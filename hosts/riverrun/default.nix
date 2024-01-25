@@ -66,17 +66,14 @@ in rec {
   };
 
   environment.systemPackages = with pkgs; [
+    tmux
     babashka
     brotli
     cachix
-    charles
     clojure
     cloudflared
     cmake
-
-    master.flyctl
-
-    master.dprint
+    master.iterm2
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
@@ -85,6 +82,9 @@ in rec {
     master.pngpaste
     master.darwin.libiconv
 
+    master.google-cloud-sdk
+
+    master.texlive.combined.scheme-full
     master.difftastic
     curl
     dnsmasq
@@ -92,6 +92,7 @@ in rec {
     shfmt
     (master.emacs29-macport.override (args: { withNativeCompilation = true; }))
     fastmod
+    graphviz
     fd
     ffmpeg
     gawk
@@ -99,23 +100,35 @@ in rec {
     htmlq
     iina
     imagemagick
+    emacs-lsp-booster
     jdk
     jq
     k6
     k9s
     kubectx
     platformsh
-    master.clj-kondo
     yt-dlp
     leiningen
     lldb
-    master.clojure-lsp
     master.nix-index
     master.nodePackages.pnpm
     master.nodePackages.prettier
     master.nodePackages.pyright
     master.nodejs-18_x
-    (master.python3.withPackages (p: with p; [ numpy sentencepiece ]))
+    (master.python3.withPackages (p:
+      with p; [
+        numpy
+        sentencepiece
+        pip
+        # Needed for lsp-bridge:
+        epc
+        orjson
+        sexpdata
+        six
+        setuptools
+        paramiko
+        rapidfuzz
+      ]))
     neovim
     nextdns
     nixfmt
@@ -128,7 +141,6 @@ in rec {
     time
     tldr
     tree
-    tree
     vim
     vollkorn
     watchman
@@ -136,6 +148,7 @@ in rec {
     yarn
     ngrok
     master.helix
+    master.poetry
   ];
 
   homebrew = {

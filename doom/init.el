@@ -14,12 +14,13 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
+(setenv "LSP_USE_PLISTS" "true")
 (doom! :input
        ;;chinese
        ;;japanese
 
        :completion
-       (company +childframe)           ; the ultimate code completion backend
+                                        ;(company +childframe)           ; the ultimate code completion backend
        ;; (helm +fuzzy +icons)
                                         ; the *other* search engine for love and life
        ;; (helm +childframe +fuzzy +icons)
@@ -84,17 +85,19 @@
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
+       ein
        ;;ansible
        ;; (debugger +lsp)
                                         ; FIXME stepping through code, to help you add bugs
        direnv
-       (docker +lsp)
+       (docker ;; +lsp
+        )
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        (lookup +docsets +dictionary)              ; navigate your code and its documentation
-       (lsp +peek)
+       ;; (lsp +peek)
        ;;macos             ; MacOS-specific commands
        (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
@@ -111,7 +114,8 @@
        :lang
        ;;agda              ; types of types of types of types...
        ;;cc                ; C/C++/Obj-C madness
-       (clojure +lsp)           ; java with a lisp
+       (clojure ;; +lsp
+        )           ; java with a lisp
        common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
@@ -133,7 +137,7 @@
        ;;idris             ;
        json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       (javascript +lsp +tree-sitter)   ; all(hope(abandon(ye(who(enter(here))))))
+       (javascript +tree-sitter)   ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        ;;latex             ; writing papers in Emacs has never been so fun
@@ -143,13 +147,15 @@
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       (nix +tree-sitter +lsp)               ; I hereby declare "nix geht mehr!"
+       (nix +tree-sitter ;; +lsp
+            )               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org +roam2 +pretty +dragndrop +pandoc)               ; organize your plain life in plain text
        php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp +poetry +tree-sitter +pyright)            ; beautiful is better than ugly
+       (python +poetry +tree-sitter +pyright ;; +lsp
+               )            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -162,7 +168,7 @@
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
-       swift             ; who asked for emoji variables?
+       ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        (web +lsp +tree-sitter)               ; the tubes
        (yaml +lsp)              ; JSON, but readable

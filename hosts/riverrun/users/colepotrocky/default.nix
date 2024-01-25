@@ -3,10 +3,12 @@
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ exercism heroku kubectl fira libtool ];
+  home.packages = with pkgs; [ exercism kubectl libtool ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+
+  # targets.genericLinux.enable = true;
 
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
@@ -18,6 +20,15 @@
     iniContent.merge.ff = "no";
     iniContent.merge.conflictstyle = "diff3";
   };
+
+  # programs.tmux = {
+  #   enable = true;
+  #   config = {
+
+  #     keyMode = "vi";
+  #     mouse = true;
+  #   }
+  # };
 
   programs.mpv = {
     enable = true;
@@ -47,8 +58,9 @@
           family = "Iosevka Raisa";
           style = "Italic";
         };
-        size = 14.0;
+        size = 15.0;
         window = {
+          option_as_alt = "OnlyLeft";
           dynamic_padding = true;
           padding = let amount = 8;
           in {
