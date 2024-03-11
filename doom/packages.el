@@ -95,11 +95,3 @@
   (package! evil-textobj-tree-sitter))
 
                                         ;(package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
-(package! company :disable t :ignore t)
-(package! corfu
-  :recipe (:files (:defaults "extensions/*.el")))
-(package! orderless)
-(package! cape)
- (package! cape-yasnippet
-   :recipe (:host github :repo "elken/cape-yasnippet"))
-(package! cape)

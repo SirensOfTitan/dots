@@ -100,8 +100,16 @@
           mozilla-overlay.overlays.rust
           nur.overlay
           (final: prev: {
-            config.allowUnfree = true;
-            config.allowAliases = true;
+            config = {
+              allowUnfree = true;
+              allowAliases = true;
+              allowBroken = false;
+              checkMeta = true;
+              allowUnsupportedSystem = false;
+              enableParallelBuildingByDefault = true;
+              contentAddressedByDefault = false;
+              configurePlatformsByDefault = true;
+            };
 
             master = nixpkgs-master.legacyPackages.${prev.system};
             devenv-pkgs = devenv.packages.${prev.system};

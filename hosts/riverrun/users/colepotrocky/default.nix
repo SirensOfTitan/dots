@@ -3,7 +3,7 @@
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ exercism kubectl libtool ];
+  home.packages = with pkgs; [ exercism kubectl libtool master.fira ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
@@ -14,7 +14,7 @@
     package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Cole Potrocky";
-    userEmail = "cole@potrocky.com";
+    userEmail = "git@potrocky.com";
 
     iniContent.pull.rebase = "true";
     iniContent.merge.ff = "no";
