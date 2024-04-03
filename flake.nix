@@ -154,6 +154,16 @@
           };
         };
 
+        galadriel = darwin.lib.darwinSystem {
+          inputs = inputs;
+          system = "aarch64-darwin";
+          modules = mkDarwinConfig {
+            host = "galadriel";
+            user = "colep";
+          };
+        };
+
+        # Deprecated RD machine, remove at some point
         galactica = darwin.lib.darwinSystem {
           inputs = inputs;
           system = "aarch64-darwin";

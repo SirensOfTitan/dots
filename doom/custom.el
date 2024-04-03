@@ -5,7 +5,15 @@
  ;; If there is more than one, they won't work right.
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(safe-local-variable-values
-   '((lsp-file-watch-ignored-directories "[/\\\\]\\.git$" "[/\\\\]\\.data$" "[/\\\\]\\.idea$" "[/\\\\]\\dist$" "[/\\\\]\\build$" "[/\\\\]\\build$" "[/\\\\]\\node_modules$" "[/\\\\]\\.direnv$" "[/\\\\]\\.cargo$" "[/\\\\]\\.direnv$" "[/\\\\]target$")
+   '((eval progn
+      (require 'lsp)
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode))))
+     (lsp-file-watch-ignored-directories "[/\\\\]\\.git$" "[/\\\\]\\.data$" "[/\\\\]\\.idea$" "[/\\\\]\\dist$" "[/\\\\]\\build$" "[/\\\\]\\build$" "[/\\\\]\\node_modules$" "[/\\\\]\\.direnv$" "[/\\\\]\\.cargo$" "[/\\\\]\\.direnv$" "[/\\\\]target$")
      (eval progn
       (require 'lsp)
       (lsp-register-client

@@ -20,7 +20,7 @@
        ;;japanese
 
        :completion
-       ;(corfu +orderless)
+                                        ;(corfu +orderless)
        (company +childframe)
                                         ;(company +childframe)           ; the ultimate code completion backend
        ;; (helm +fuzzy +icons)
@@ -89,7 +89,7 @@
        :tools
        ein
        ;;ansible
-       ;; (debugger +lsp)
+       (debugger +lsp)
                                         ; FIXME stepping through code, to help you add bugs
        direnv
        (docker ;; +lsp
@@ -99,7 +99,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        (lookup +docsets +dictionary)              ; navigate your code and its documentation
-       ;; (lsp +peek)
+       (lsp +peek)
        ;;macos             ; MacOS-specific commands
        (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
@@ -156,7 +156,7 @@
        php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +poetry +tree-sitter +pyright ;; +lsp
+       (python +lsp +tree-sitter +pyright ;; +lsp
                )            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs

@@ -91,6 +91,10 @@
 (package! ox-hugo)
 (package! python-black)
 
+(package! mermaid-mode :recipe (:host github :repo "abrochard/mermaid-mode" :branch "master"))
+(when (featurep! :lang org)
+  (package! ob-mermaid))
+
 (when (featurep! :editor evil +everywhere)
   (package! evil-textobj-tree-sitter))
 
