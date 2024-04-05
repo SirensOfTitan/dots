@@ -95,6 +95,8 @@
 (when (featurep! :lang org)
   (package! ob-mermaid))
 
+(package! treesit-auto)
+
 (when (featurep! :editor evil +everywhere)
   (package! evil-textobj-tree-sitter))
 

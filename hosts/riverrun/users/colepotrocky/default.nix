@@ -30,22 +30,6 @@
   #   }
   # };
 
-  programs.mpv = {
-    enable = true;
-    config = {
-      "sub-visibility" = "yes";
-      "sub-auto" = "fuzzy";
-      "sub-font" = "Besley*";
-      "sub-font-size" = "60";
-      "alang" = "ru, en";
-      "slang" = "ru, en";
-      "audio-file-auto" = "fuzzy";
-      "save-position-on-quit" = "yes";
-      "autofit-larger" = "100%x100%";
-      "geometry" = "50%:50%";
-    };
-  };
-
   programs.alacritty = {
     enable = true;
     settings = {

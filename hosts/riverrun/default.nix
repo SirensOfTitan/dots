@@ -1,50 +1,15 @@
 { pkgs, lib, nixpkgs, inputs, ... }:
 
-let
-  linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] pkgs.system;
-  darwin-builder = lib.nixosSystem {
-    system = linuxSystem;
-    modules = [
-      "${inputs.nixpkgs}/nixos/modules/profiles/macos-builder.nix"
-      {
-        virtualisation.host.pkgs = pkgs;
-        system.nixos.revision = lib.mkForce null;
-      }
-    ];
-  };
-in rec {
+rec {
   system.stateVersion = 4;
   nix.package = pkgs.master.nixVersions.nix_2_16;
   nix.configureBuildUsers = true;
 
   services.nix-daemon.enable = true;
 
-  nix.distributedBuilds = true;
-  nix.buildMachines = [{
-    protocol = "ssh-ng";
-    hostName = "ssh://builder@localhost";
-    system = linuxSystem;
-    maxJobs = 4;
-    sshKey = "/etc/nix/builder_ed25519";
-    supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
-  }];
-
-  launchd.daemons.darwin-builder = {
-    command =
-      "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
-    serviceConfig = {
-      KeepAlive = true;
-      RunAtLoad = true;
-      StandardOutPath = "/var/log/darwin-builder.log";
-      StandardErrorPath = "/var/log/darwin-builder.log";
-      WorkingDirectory = "/etc/nix/";
-    };
-  };
-
   nix.extraOptions = ''
     experimental-features = nix-command flakes ca-derivations
     extra-trusted-users = colepotrocky
-    builders = ssh-ng://builder@linux-builder aarch64-linux /etc/nix/builder_ed25519 4 - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
   '';
 
   nix.settings.trusted-substituters = [
@@ -82,15 +47,23 @@ in rec {
     master.pngpaste
     master.darwin.libiconv
 
-    master.google-cloud-sdk
+    google-cloud-sdk
 
-    master.texlive.combined.scheme-full
     master.difftastic
     curl
     dnsmasq
     docker
     shfmt
-    (master.emacs29-macport.override (args: { withNativeCompilation = true; }))
+
+    ((master.emacs29-macport.overrideAttrs {
+      version = "29.3";
+      src = pkgs.fetchFromBitbucket {
+        owner = "mituharu";
+        repo = "emacs-mac";
+        rev = "0386c590892066c4b58388848c2c93c61a505b31";
+        hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
+      };
+    }).override { withNativeCompilation = true; })
     fastmod
     graphviz
     fd
@@ -103,10 +76,8 @@ in rec {
     emacs-lsp-booster
     jdk
     jq
-    k6
     k9s
     kubectx
-    platformsh
     yt-dlp
     leiningen
     lldb
@@ -115,6 +86,7 @@ in rec {
     master.nodePackages.prettier
     master.nodePackages.pyright
     master.nodejs-18_x
+    nix-tree
     (master.python3.withPackages (p:
       with p; [
         numpy
@@ -143,12 +115,10 @@ in rec {
     tree
     vim
     vollkorn
-    watchman
     vscode
     yarn
     ngrok
     master.helix
-    master.poetry
   ];
 
   homebrew = {

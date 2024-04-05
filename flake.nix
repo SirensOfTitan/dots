@@ -7,15 +7,13 @@
 
     git-branchless.url = "github:arxanas/git-branchless";
 
-    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    nur.url = "github:nix-community/NUR";
-
-    mozilla-overlay.url = "github:mozilla/nixpkgs-mozilla";
+    rust-overlay.url = "github:oxalica/rust-overlay";
 
     # language learning
     mpvacious = {
@@ -80,7 +78,7 @@
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-master, devenv, darwin, home-manager
-    , nur, mpvacious, git-branchless, mozilla-overlay, ... }:
+    , mpvacious, rust-overlay, ... }:
     let
       nixpkgsConfig = {
         config = {
@@ -96,9 +94,7 @@
           nix.trustedUsers = [ "root" "@wheel" ];
         };
         overlays = [
-          git-branchless.overlay
-          mozilla-overlay.overlays.rust
-          nur.overlay
+          rust-overlay.overlays.default
           (final: prev: {
             config = {
               allowUnfree = true;
@@ -114,15 +110,10 @@
             master = nixpkgs-master.legacyPackages.${prev.system};
             devenv-pkgs = devenv.packages.${prev.system};
 
-            firefox-dev-edition =
-              prev.callPackage ./overlays/firefox-dev-edition.nix { };
             charles = if prev.stdenv.isDarwin then
               (prev.callPackage ./overlays/charles.nix { })
             else
               prev.charles;
-
-            emacs-lsp-booster =
-              prev.callPackage ./overlays/emacs-lsp-booster.nix { };
           })
         ];
       };
