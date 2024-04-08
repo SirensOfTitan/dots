@@ -20,15 +20,18 @@
        ;;japanese
 
        :completion
+       (corfu +orderless +icons +dabbrev)
+       (vertico +childframe +icons)
                                         ;(corfu +orderless)
-       (company +childframe)
+       ;; (company +childframe)
+
                                         ;(company +childframe)           ; the ultimate code completion backend
        ;; (helm +fuzzy +icons)
                                         ; the *other* search engine for love and life
        ;; (helm +childframe +fuzzy +icons)
        ;;ido               ; the other *other* search engine...
        ;; (vertico +icons)
-       (ivy +prescient +fuzzy +icons +childframe)
+       ;; (ivy +prescient +fuzzy +icons +childframe)
                                         ; a search engine for love and life
 
        :ui

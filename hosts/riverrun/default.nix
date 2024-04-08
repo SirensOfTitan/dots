@@ -2,7 +2,7 @@
 
 rec {
   system.stateVersion = 4;
-  nix.package = pkgs.master.nixVersions.nix_2_16;
+  nix.package = pkgs.master.nixVersions.nix_2_19;
   nix.configureBuildUsers = true;
 
   services.nix-daemon.enable = true;

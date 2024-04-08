@@ -142,15 +142,6 @@
   :after magit
   :if (executable-find "delta"))
 
-(custom-set-faces!
-  '(org-level-1 :family "Besley*" :weight semi-bold :height 1.3)
-  '(org-level-2 :family "Besley*" :weight semi-bold :height 1.1)
-  '(org-level-3 :family "Besley*" :weight semi-bold)
-  '(org-level-4 :family "Besley*" :weight medium)
-  '(org-level-5 :family "Besley*" :weight medium)
-  '(org-level-6 :family "Besley*" :weight medium)
-  '(org-level-7 :family "Besley*" :weight medium))
-
 (with-eval-after-load 'org-superstar
   (set-face-attribute 'org-superstar-header-bullet nil :height 1.1)
   (set-face-attribute 'org-superstar-item nil :height 2.0)
@@ -162,6 +153,9 @@
   (setq dired-omit-files "^\\.[^.].*$"))
 
 (use-package! org
+  :hook ((org-mode . olivetti-mode)
+         (org-mode . org-appear-mode)
+         (org-mode . doom-disable-line-numbers-h))
   :config
   (setq org-adapt-indentation nil)
   (setq org-indent-indentation-per-level 1)
@@ -173,9 +167,9 @@
 (after! org (add-to-list 'org-modules 'org-habit t))
 (setq org-journal-file-type 'monthly)
 
-(add-hook 'org-mode-hook #'org-appear-mode)
+;; (add-hook 'org-mode-hook #'org-appear-mode)
 
-(add-hook 'org-mode-hook #'doom-disable-line-numbers-h)
+;; (add-hook 'org-mode-hook #'doom-disable-line-numbers-h)
 
 (after! org
   (setq org-attach-dir-relative t))
@@ -415,3 +409,5 @@ window instead."
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
+
+

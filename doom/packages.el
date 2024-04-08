@@ -101,3 +101,8 @@
   (package! evil-textobj-tree-sitter))
 
                                         ;(package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
+
+(package! olivetti
+  :recipe (:host github
+           :repo "rnkn/olivetti"
+           :branch "master"))
