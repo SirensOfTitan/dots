@@ -114,27 +114,30 @@
   (setq org-anki-default-deck "General")
   (setq org-anki-default-match "+anki"))
 
-(use-package! mixed-pitch
-  :hook (org-mode . mixed-pitch-mode)
-  :config
-  (pushnew! mixed-pitch-fixed-pitch-faces
-            'org-date
-            'org-special-keyword
-            'org-property-value
-            'org-drawer
-            'org-ref-cite-face
-            'org-tag
-            'org-todo-keyword-todo
-            'org-todo-keyword-habt
-            'org-todo-keyword-done
-            'org-todo-keyword-wait
-            'org-todo-keyword-kill
-            'org-todo-keyword-outd
-            'org-todo
-            'org-done
-            'font-lock-comment-face
-            'line-number
-            'line-number-current-line))
+(use-package! org-modern
+  :hook (org-mode . org-modern-mode))
+
+;; (use-package! mixed-pitch
+;;   :hook (org-mode . mixed-pitch-mode)
+;;   :config
+;;   (pushnew! mixed-pitch-fixed-pitch-faces
+;;             'org-date
+;;             'org-special-keyword
+;;             'org-property-value
+;;             'org-drawer
+;;             'org-ref-cite-face
+;;             'org-tag
+;;             'org-todo-keyword-todo
+;;             'org-todo-keyword-habt
+;;             'org-todo-keyword-done
+;;             'org-todo-keyword-wait
+;;             'org-todo-keyword-kill
+;;             'org-todo-keyword-outd
+;;             'org-todo
+;;             'org-done
+;;             'font-lock-comment-face
+;;             'line-number
+;;             'line-number-current-line))
 
 ;; Set org faces
 
@@ -142,10 +145,10 @@
   :after magit
   :if (executable-find "delta"))
 
-(with-eval-after-load 'org-superstar
-  (set-face-attribute 'org-superstar-header-bullet nil :height 1.1)
-  (set-face-attribute 'org-superstar-item nil :height 2.0)
-  (set-face-attribute 'org-superstar-leading nil :height 0.5))
+;; (with-eval-after-load 'org-superstar
+;;   (set-face-attribute 'org-superstar-header-bullet nil :height 1.1)
+;;   (set-face-attribute 'org-superstar-item nil :height 2.0)
+;;   (set-face-attribute 'org-superstar-leading nil :height 0.5))
 
 (use-package! dired
   :hook (dired-mode . dired-omit-mode)
@@ -154,7 +157,6 @@
 
 (use-package! org
   :hook ((org-mode . olivetti-mode)
-         (org-mode . org-appear-mode)
          (org-mode . doom-disable-line-numbers-h))
   :config
   (setq org-adapt-indentation nil)
@@ -271,11 +273,11 @@ window instead."
   :config
   (ultra-scroll-mac-mode 1))
 
-(after! (org-roam)
-  (winner-mode +1)
-  (map! :map winner-mode-map
-        "<M-right>" #'winner-redo
-        "<M-left>" #'winner-undo))
+;; (after! (org-roam)
+;;   (winner-mode +1)
+;;   (map! :map winner-mode-map
+;;         "<M-right>" #'winner-redo
+;;         "<M-left>" #'winner-undo))
 
 (defun +org-auto-id-add-to-headlines-in-file ()
   "Add ID property to the current file and all its headlines."
@@ -403,11 +405,21 @@ window instead."
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 ;; End LSP boost
 
-(use-package! treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
+;; (use-package! treesit-auto
+;;   :custom
+;;   (treesit-auto-install 'prompt)
+;;   :config
+;;   (treesit-auto-add-to-auto-mode-alist 'all)
+;;   (global-treesit-auto-mode))
+
+
+(use-package! difftastic
+  :after magit
+  :bind (:map magit-blame-read-only-mode-map
+              ("D" . difftastic-magit-show)
+              ("S" . difftastic-magit-show))
   :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
-
-
+  (eval-after-load 'magit-diff
+    '(transient-append-suffix 'magit-diff '(-1 -1)
+       [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+        ("S" "Difftastic show" difftastic-magit-show)])))

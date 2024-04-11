@@ -89,13 +89,14 @@
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 (package! latex-preview-pane)
 (package! ox-hugo)
-(package! python-black)
+;; (package! python-black)
+(package! org-modern)
 
 (package! mermaid-mode :recipe (:host github :repo "abrochard/mermaid-mode" :branch "master"))
 (when (featurep! :lang org)
   (package! ob-mermaid))
 
-(package! treesit-auto)
+;; (package! treesit-auto)
 
 (when (featurep! :editor evil +everywhere)
   (package! evil-textobj-tree-sitter))
@@ -106,3 +107,5 @@
   :recipe (:host github
            :repo "rnkn/olivetti"
            :branch "master"))
+
+(package! difftastic)
