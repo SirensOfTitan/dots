@@ -56,6 +56,18 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/org")
 
+(after! org-agenda
+  (setq org-agenda-files (list org-directory (concat org-directory "/roam") (concat org-directory "/roam/daily")))
+  (setq org-agenda-custom-commands
+        '(("w" "Function Health TODO items"
+           ((org-ql-block '(and (todo "TODO")
+                                (tags "FUNCTION"))
+                          ((org-ql-block-header "Function TODOs")))))
+          ("p" "Personal TODO items"
+           ((org-ql-block '(and (todo "TODO")
+                                (not (tags "FUNCTION")))
+                          ((org-ql-block-header "Personal TODOs"))))))))
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
@@ -423,3 +435,14 @@ window instead."
     '(transient-append-suffix 'magit-diff '(-1 -1)
        [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
         ("S" "Difftastic show" difftastic-magit-show)])))
+
+(after! corfu
+  (setq! corfu-auto-delay 0
+         corfu-preview-current nil
+         corfu-preselect t
+         corfu-max-width 70
+         tab-always-indent t))
+;; (map! :map corfu-map
+;;       :gi "TAB" #'corfu-complete
+;;       :gi "<tab>" #'corfu-complete
+;;       :gi "C-y" #'corfu-complete)

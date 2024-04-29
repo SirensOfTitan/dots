@@ -1,4 +1,10 @@
-{ pkgs, lib, nixpkgs, inputs, ... }:
+{
+  pkgs,
+  lib,
+  nixpkgs,
+  inputs,
+  ...
+}:
 
 rec {
   system.stateVersion = 4;
@@ -27,7 +33,11 @@ rec {
 
   fonts = {
     fontDir.enable = true;
-    fonts = with pkgs; [ vollkorn inter font-awesome ];
+    fonts = with pkgs; [
+      vollkorn
+      inter
+      font-awesome
+    ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -42,6 +52,7 @@ rec {
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
+    master.sqlite-vss
     master.nil
     master.dockfmt
     master.pngpaste
@@ -55,15 +66,18 @@ rec {
     docker
     shfmt
 
-    ((master.emacs29-macport.overrideAttrs {
-      version = "29.3";
-      src = pkgs.fetchFromBitbucket {
-        owner = "mituharu";
-        repo = "emacs-mac";
-        rev = "0386c590892066c4b58388848c2c93c61a505b31";
-        hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
-      };
-    }).override { withNativeCompilation = true; })
+    (
+      (master.emacs29-macport.overrideAttrs {
+        version = "29.3";
+        src = pkgs.fetchFromBitbucket {
+          owner = "mituharu";
+          repo = "emacs-mac";
+          rev = "0386c590892066c4b58388848c2c93c61a505b31";
+          hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
+        };
+      }).override
+      { withNativeCompilation = true; }
+    )
     fastmod
     graphviz
     fd
@@ -86,9 +100,10 @@ rec {
     master.nodePackages.prettier
     master.nodePackages.pyright
     master.nodejs-18_x
+    master.devenv
     nix-tree
-    (master.python3.withPackages (p:
-      with p; [
+    (master.python3.withPackages (
+      p: with p; [
         numpy
         sentencepiece
         pip
@@ -100,10 +115,11 @@ rec {
         setuptools
         paramiko
         rapidfuzz
-      ]))
+      ]
+    ))
     neovim
     nextdns
-    nixfmt
+    nixfmt-rfc-style
     pandoc
     parallel
     rclone
@@ -142,7 +158,14 @@ rec {
       "railwaycat/emacsmacport"
     ];
 
-    brews = [ "colima" "pulumi" "cocoapods" "bun" "editorconfig" "coreutils" ];
+    brews = [
+      "colima"
+      "pulumi"
+      "cocoapods"
+      "bun"
+      "editorconfig"
+      "coreutils"
+    ];
 
     casks = [
       "anki"

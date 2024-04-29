@@ -109,3 +109,7 @@
            :branch "master"))
 
 (package! difftastic)
+
+(package! org-ql :recipe (:host github
+                          :repo "alphapapa/org-ql"
+                          :branch "master"))
