@@ -7,6 +7,70 @@
  '(safe-local-variable-values
    '((eval progn
       (require 'lsp)
+      (lsp-register-custom-settings
+       '(("ruff.format.args"
+          ["--config ./pyproject.toml"])
+         ("ruff.args" }
+          ["--config ./pyproject.toml"])))
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode))))
+     (eval progn
+      (require 'lsp)
+      (lsp-register-custom-settings
+       '(("ruff.format.args"
+          ["--config ./pyproject.toml"])))
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode))))
+     (eval progn
+      (require 'lsp)
+      (lsp-register-custom-settings
+       '(("ruff.format.args" "--config ./pyproject.toml")))
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode))))
+     (eval progn
+      (require 'lsp)
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode)))
+      (lsp-register-custom-settings
+       '(("ruff-lsp.format.args" "--config ./pyproject.toml"))))
+     (eval progn
+      (require 'lsp)
+      (lsp-register-custom-settings
+       '(("ruff-lsp.format.args" "--config ./pyproject.toml")))
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode))))
+     (eval progn
+      (require 'lsp)
+      (lsp-register-custom-settings
+       '(("format.args" "--config ./pyproject.toml")))
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         '("ruff-lsp"))
+                        :server-id 'ruff-lsp :add-on? t :major-modes
+                        '(python-mode))))
+     (eval progn
+      (require 'lsp)
       (lsp-register-client
        (make-lsp-client :new-connection
                         (lsp-stdio-connection

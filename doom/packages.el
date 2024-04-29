@@ -113,3 +113,7 @@
 (package! org-ql :recipe (:host github
                           :repo "alphapapa/org-ql"
                           :branch "master"))
+(package! gh-notify
+  :recipe (:host github
+           :repo "anticomputer/gh-notify"
+           :branch "main"))

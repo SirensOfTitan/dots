@@ -40,7 +40,6 @@ rec {
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
     master.nil
-    master.dockfmt
     master.pngpaste
     master.darwin.libiconv
 
