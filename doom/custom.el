@@ -6,6 +6,70 @@
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(safe-local-variable-values
    '((eval progn
+      (setq lsp-ruff-lsp-ruff-args
+       (vector
+        (format "--config=%spyproject.toml"
+                (locate-dominating-file ".git" "pyproject.toml"))))
+      (lsp-register-client
+       (make-lsp-client :new-connection
+                        (lsp-stdio-connection
+                         (lambda nil lsp-ruff-lsp-server-command))
+                        :activation-fn
+                        (lsp-activate-on "python")
+                        :server-id 'ruff-lsp :priority -2 :add-on? t :initialization-options
+                        (lambda nil
+                          (list :settings
+                                (list :args lsp-ruff-lsp-ruff-args :format.args lsp-ruff-lsp-ruff-args :logLevel lsp-ruff-lsp-log-level :path lsp-ruff-lsp-ruff-path :interpreter
+                                      (vector lsp-ruff-lsp-python-path)
+                                      :showNotifications lsp-ruff-lsp-show-notifications :organizeImports
+                                      (lsp-json-bool lsp-ruff-lsp-advertize-organize-imports)
+                                      :fixAll
+                                      (lsp-json-bool lsp-ruff-lsp-advertize-fix-all)
+                                      :importStrategy lsp-ruff-lsp-import-strategy))))))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            (vector
+             (format "--config=%spyproject.toml"
+                     (locate-dominating-file ".git" "pyproject.toml")))))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            (vector
+             (format "--config=%s/pyproject.toml"
+                     (locate-dominating-file ".git" "pyproject.toml")))))
+     (eval progn
+      (print "hi"
+             (locate-dominating-file default-directory ".git" "pyproject.toml"))
+      (setq lsp-ruff-lsp-ruff-args
+            (vector
+             (format "--config=%s/pyproject.toml"
+                     (locate-dominating-file default-directory ".git" "pyproject.toml")))))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            (vector
+             (format "--config=%s/pyproject.toml"
+                     (locate-dominating-file default-directory ".git" "pyproject.toml")))))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            (vector
+             (format "--config=%s/pyproject.toml"
+                     (vc-root-dir)))))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            (vector
+             (format "--config%spyproject.toml"
+                     (vc-root-dir)))))
+     (eval progn
+      (print "hi")
+      (setq lsp-ruff-lsp-ruff-args
+            [(format "--config%spyproject.toml"
+                     (vc-root-dir))]))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            ["--config=./pyproject.toml"]))
+     (eval progn
+      (setq lsp-ruff-lsp-ruff-args
+            ["--config ./pyproject.toml"]))
+     (eval progn
       (require 'lsp)
       (lsp-register-custom-settings
        '(("ruff.format.args"

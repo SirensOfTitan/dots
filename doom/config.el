@@ -437,12 +437,15 @@ window instead."
         ("S" "Difftastic show" difftastic-magit-show)])))
 
 (after! corfu
-  (setq! corfu-auto-delay 0
-         corfu-preview-current nil
-         corfu-preselect t
-         corfu-max-width 70
-         tab-always-indent t))
+  (setq! corfu-preselect t
+         +corfu-want-minibuffer-completion nil
+         corfu-max-width 70))
 ;; (map! :map corfu-map
 ;;       :gi "TAB" #'corfu-complete
 ;;       :gi "<tab>" #'corfu-complete
 ;;       :gi "C-y" #'corfu-complete)
+
+
+;; (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'python-mode))
+
+(setq-hook! 'python-mode-hook +format-with '+format-with-lsp-fn)
