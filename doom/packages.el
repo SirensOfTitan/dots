@@ -117,3 +117,4 @@
   :recipe (:host github
            :repo "anticomputer/gh-notify"
            :branch "main"))
+(package! casual)

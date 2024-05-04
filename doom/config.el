@@ -436,6 +436,11 @@ window instead."
        [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
         ("S" "Difftastic show" difftastic-magit-show)])))
 
+(map!
+ (:after casual
+         (:leader
+          :desc "Calculator" "C" #'casual-main-menu)))
+
 (after! corfu
   (setq! corfu-preselect t
          +corfu-want-minibuffer-completion nil
