@@ -189,7 +189,7 @@
   (setq org-attach-dir-relative t))
 
 (use-package! org-transclusion
-  :defer
+  :hook (org-mode . org-transclusion-mode)
   :after org
   :init
   (map!
@@ -258,6 +258,26 @@ window instead."
                            other-window))))
 
 (setq enable-local-variables t)
+
+(defun colep/org-roam-prompt-template ()
+  (let* ((prompts (org-roam-db-query [:select [nodes:title, nodes:id]
+                                      :from nodes
+                                      :inner-join tags
+                                      :on (= tags:node-id nodes:id)
+                                      :where (= tags:tag "prompt")]))
+         (random-prompt (nth (random (length prompts)) prompts)))
+    (concat (format "* Prompt\n#+transclude: [[id:%s][%s]] :exclude-elements \"drawer\"\n** Response\n"
+                    (nth 0 (cdr random-prompt))
+                    (car random-prompt))
+            "%?")))
+
+(after! org-roam
+  (setq org-roam-capture-templates
+        '(("d" "default" plain "%?" :target
+           (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n"))
+          ("p" "prompt" plain
+           (function colep/org-roam-prompt-template)
+           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")))))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
