@@ -35,6 +35,7 @@ rec {
     babashka
     brotli
     cachix
+    master.tflint
     master.iterm2
 
     # Things needed for emacs to run properly.
