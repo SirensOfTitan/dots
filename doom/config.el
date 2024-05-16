@@ -266,12 +266,31 @@ window instead."
                                       :on (= tags:node-id nodes:id)
                                       :where (= tags:tag "prompt")]))
          (random-prompt (nth (random (length prompts)) prompts)))
-    (concat (format "* Prompt\n#+transclude: [[id:%s][%s]] :exclude-elements \"drawer\"\n** Response\n"
+    (concat (format "* Prompt\n#+transclude: [[id:%s][%s]] :exclude-elements \"drawer title filetags\"\n** Response\n"
                     (nth 0 (cdr random-prompt))
                     (car random-prompt))
             "%?")))
 
+(use-package! org-roam
+  :init
+  (map!
+   :leader
+   :prefix "n r"
+   :desc "Capture random prompt in daily" "p" #'colep/org-roam-capture-prompt-in-daily))
+
+
+(defun colep/org-roam-capture-prompt-in-daily ()
+  "Capture a prompt in today's daily note."
+  (interactive)
+  (org-roam-dailies-capture-today nil "p"))
+
+
 (after! org-roam
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry "* %?" :target
+           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+          ("p" "prompt" entry (function colep/org-roam-prompt-template) :target
+           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n"))
