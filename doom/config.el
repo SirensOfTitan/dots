@@ -189,7 +189,7 @@
   (setq org-attach-dir-relative t))
 
 (use-package! org-transclusion
-  :hook (org-mode . org-transclusion-mode)
+  :hook (org-mode-hook . org-transclusion-mode)
   :after org
   :init
   (map!
@@ -257,19 +257,14 @@ window instead."
                                                  :point (nth 2 random-row))
                            other-window))))
 
+
+(defun colep/org-roam-capture-hook ()
+  (message "removeccp123")
+  (org-transclusion-remove-all))
+
+(add-hook 'org-capture-before-finalize-hook #'colep/org-roam-capture-hook)
 (setq enable-local-variables t)
 
-(defun colep/org-roam-prompt-template ()
-  (let* ((prompts (org-roam-db-query [:select [nodes:title, nodes:id]
-                                      :from nodes
-                                      :inner-join tags
-                                      :on (= tags:node-id nodes:id)
-                                      :where (= tags:tag "prompt")]))
-         (random-prompt (nth (random (length prompts)) prompts)))
-    (concat (format "* Prompt\n#+transclude: [[id:%s][%s]] :exclude-elements \"drawer title filetags\"\n** Response\n"
-                    (nth 0 (cdr random-prompt))
-                    (car random-prompt))
-            "%?")))
 
 (use-package! org-roam
   :init
@@ -284,17 +279,29 @@ window instead."
   (interactive)
   (org-roam-dailies-capture-today nil "p"))
 
+(defun colep/org-roam-prompt-template ()
+  (let* ((prompts (org-roam-db-query [:select [nodes:title, nodes:id]
+                                      :from nodes
+                                      :inner-join tags
+                                      :on (= tags:node-id nodes:id)
+                                      :where (= tags:tag "prompt")]))
+         (random-prompt (nth (random (length prompts)) prompts)))
+    (message "test stuff %s %s" prompts (length prompts))
+    (concat (format "* Prompt\n#+transclude: [[id:%s][%s]] :exclude-elements \"drawer title filetags\" :disable-auto\n** Response\n"
+                    (nth 0 (cdr random-prompt))
+                    (car random-prompt))
+            "%?")))
 
 (after! org-roam
   (setq org-roam-dailies-capture-templates
         '(("d" "default" entry "* %?" :target
            (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-          ("p" "prompt" entry (function colep/org-roam-prompt-template) :target
+          ("p" "prompt" entry (function (lambda (&rest _) (colep/org-roam-prompt-template))) :target
            (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n"))
-          ("p" "prompt" plain
+          ("i" "prompti" plain
            (function colep/org-roam-prompt-template)
            :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")))))
 
