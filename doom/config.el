@@ -294,16 +294,15 @@ window instead."
 
 (after! org-roam
   (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry "* %?" :target
+        '(("d" "[D]efault" entry "* %?" :target
+           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+          ("w" "[W]ork todo" entry "* TODO %? :FUNCTION:" :target
+           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+          ("b" "[B]ookmark" entry
+           "* [[%^{link-url}][%^{link-description}]] :BOOKMARK:" :target
            (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
           ("p" "prompt" entry (function (lambda (&rest _) (colep/org-roam-prompt-template))) :target
-           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :target
-           (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n"))
-          ("i" "prompti" plain
-           (function colep/org-roam-prompt-template)
-           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")))))
+           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n")))))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
