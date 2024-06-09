@@ -1,4 +1,4 @@
-name: Prime cache for fenix
+name: Prime cache for systems
 on:
   push:
     branches:
@@ -6,7 +6,12 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-latest # M1 mac
+    strategy:
+      matrix:
+        machine:
+          - galadriel
+          - riverrun
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,11 +30,5 @@ jobs:
           nix flake check
 
       - name: Build with nix
-        env:
-          BUILD_FLAGS: --override-input nixpkgs github:nixos/nixpkgs/nixpkgs-unstable
         run: |
-
-          nix build $BUILD_FLAGS .#{{stable,beta,minimal,default,complete}.toolchain,rust-analyzer{,-vscode-extension}}
-          ./test
-
-          nix build $BUILD_FLAGS .#latest.toolchain
+          nix build '.#darwinConfigurations.${{ matrix.machine }}'
