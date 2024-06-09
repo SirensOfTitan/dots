@@ -119,6 +119,7 @@ rec {
     ))
     neovim
     nextdns
+    lsp-ai
     nixfmt-rfc-style
     pandoc
     parallel
@@ -165,6 +166,7 @@ rec {
       "bun"
       "editorconfig"
       "coreutils"
+      "ast-grep"
     ];
 
     casks = [

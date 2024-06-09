@@ -14,12 +14,13 @@
 ;; clients, file templates and snippets.
 (setq user-full-name "Cole Potrocky"
       user-mail-address "cole@potrocky.com"
-      doom-theme 'kaolin-valley-light
+      ;; doom-theme 'kaolin-valley-light
+      doom-theme 'doom-rouge
       doom-font (font-spec :family "PragmataPro Mono Liga" :size 16)
       doom-big-font (font-spec :family "PragmataPro Liga")
       header-font (font-spec :family "PragmataPro Liga" :size 15)
-      doom-variable-pitch-font (font-spec :family "PragmataPro Liga" :size 15)
-      doom-serif-font (font-spec :family "Vollkorn"))
+      doom-variable-pitch-font (font-spec :family "Fira Sans Condensed" :size 15)
+      doom-serif-font (font-spec :family "Besley*"))
 ;; (setq +format-with-lsp nil)
 (setenv "EDITOR" "emacsclient")
 (setq which-key-idle-delay 0.3)
@@ -127,7 +128,8 @@
   (setq org-anki-default-match "+anki"))
 
 (use-package! org-modern
-  :hook (org-mode . org-modern-mode))
+  :hook (org-mode . org-modern-mode)
+  :config (setq org-modern-star 'replace))
 
 ;; (use-package! mixed-pitch
 ;;   :hook (org-mode . mixed-pitch-mode)
@@ -176,6 +178,11 @@
   (setq org-hide-emphasis-markers t)
   (setq org-default-notes-file (concat org-directory "inbox.org"))
   (setq org-catch-invisible-edits 'show-and-error)
+  (setq org-auto-align-tags nil)
+  (setq org-tags-column 0)
+  (setq org-catch-invisible-edits 'show-and-error)
+  (setq org-pretty-entities t)
+  (setq org-ellipsis "…")
   (setq org-reverse-note-order t))
 
 (after! org (add-to-list 'org-modules 'org-habit t))
@@ -258,11 +265,6 @@ window instead."
                            other-window))))
 
 
-(defun colep/org-roam-capture-hook ()
-  (message "removeccp123")
-  (org-transclusion-remove-all))
-
-(add-hook 'org-capture-before-finalize-hook #'colep/org-roam-capture-hook)
 (setq enable-local-variables t)
 
 
@@ -413,24 +415,6 @@ window instead."
 (after! magit
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
 
-;; (use-package! lsp-bridge
-;;   :config
-;;   (setq lsp-bridge-python-lsp-server "pyright")
-;;   (setq lsp-bridge-nix-lsp-server "nil")
-;;   (setq lsp-bridge-enable-log nil)
-;;   (map! :map acm-mode-map
-;;         [tab]           #'acm-select-next
-;;         [backtab]       #'acm-select-prev)
-;;   (map! :map doom-leader-code-map
-;;         :desc "LSP rename"
-;;         "r"             #'lsp-bridge-rename
-;;         :desc "find declaration"
-;;         "j"             #'lsp-bridge-find-declaration)
-;;   (require 'yasnippet)
-;;   (yas-global-mode 1)
-;;   (global-lsp-bridge-mode))
-
-
 ;; LSP boost
 (defun lsp-booster--advice-json-parse (old-fn &rest args)
   "Try to parse bytecode instead of json."
@@ -469,6 +453,11 @@ window instead."
 ;;   (treesit-auto-add-to-auto-mode-alist 'all)
 ;;   (global-treesit-auto-mode))
 
+(use-package! treesit-auto
+  :custom (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (use-package! difftastic
   :after magit

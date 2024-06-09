@@ -55,7 +55,7 @@
            :repo "hekinami/justify-kp"))
 (unpin! org-roam)
 (unpin! lsp-mode)
-(package! company-posframe)
+;; (package! company-posframe)
 (package! websocket)
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...
@@ -64,12 +64,12 @@
                                         ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
                                         ;(unpin! t)
-(package! corfu)
 (package! org-transclusion
   :recipe (:host github
            :repo "nobiot/org-transclusion"
            :branch "main"
            :files ("*.el")))
+(unpin! corfu)
 (package! org-dynamic-bullets
   :recipe (:host github
            :repo "legalnonsense/org-visual-outline"
@@ -96,7 +96,7 @@
 (when (featurep! :lang org)
   (package! ob-mermaid))
 
-;; (package! treesit-auto)
+(package! treesit-auto)
 
 (when (featurep! :editor evil +everywhere)
   (package! evil-textobj-tree-sitter))
@@ -118,3 +118,6 @@
            :repo "anticomputer/gh-notify"
            :branch "main"))
 (package! casual)
+(package! babashka :recipe (:host github
+                            :repo "licht1stein/babashka.el"
+                            :branch "master"))

@@ -1,0 +1,40 @@
+name: Prime cache for fenix
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: build
+    runs-on: macos-latest
+    variables:
+      build-flags:
+        - ""
+        - --override-input nixpkgs github:nixos/nixpkgs/nixpkgs-unstable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v27
+
+      - name: Set up cachix
+        uses: cachix/cachix-action@v15
+        with:
+          name: sirensoftitan
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Check with nix
+        run: |
+          nix flake check
+
+      - name: Build with nix
+        env:
+          BUILD_FLAGS: --override-input nixpkgs github:nixos/nixpkgs/nixpkgs-unstable
+        run: |
+
+          nix build $BUILD_FLAGS .#{{stable,beta,minimal,default,complete}.toolchain,rust-analyzer{,-vscode-extension}}
+          ./test
+
+          nix build $BUILD_FLAGS .#latest.toolchain

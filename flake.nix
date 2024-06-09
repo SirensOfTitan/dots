@@ -5,6 +5,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     git-branchless.url = "github:arxanas/git-branchless";
 
     darwin.url = "github:lnl7/nix-darwin";
@@ -12,8 +17,6 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    rust-overlay.url = "github:oxalica/rust-overlay";
 
     # language learning
     mpvacious = {
@@ -77,8 +80,18 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-master, devenv, darwin, home-manager
-    , mpvacious, rust-overlay, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      devenv,
+      darwin,
+      home-manager,
+      mpvacious,
+      fenix,
+      ...
+    }:
     let
       nixpkgsConfig = {
         config = {
@@ -91,10 +104,13 @@
             options = "--delete-older-than 7d";
           };
           nix.autoOptimiseStore = true;
-          nix.trustedUsers = [ "root" "@wheel" ];
+          nix.trustedUsers = [
+            "root"
+            "@wheel"
+          ];
         };
         overlays = [
-          rust-overlay.overlays.default
+          fenix.overlays.default
           (final: prev: {
             config = {
               allowUnfree = true;
@@ -110,30 +126,35 @@
             master = nixpkgs-master.legacyPackages.${prev.system};
             devenv-pkgs = devenv.packages.${prev.system};
 
-            charles = if prev.stdenv.isDarwin then
-              (prev.callPackage ./overlays/charles.nix { })
-            else
-              prev.charles;
+            lsp-ai = (prev.callPackage ./overlays/lsp-ai.nix { });
+
+            charles =
+              if prev.stdenv.isDarwin then (prev.callPackage ./overlays/charles.nix { }) else prev.charles;
           })
         ];
       };
 
-      mkDarwinConfig = { host, user }: [
-        (./. + "/hosts/${host}")
-        home-manager.darwinModules.home-manager
-        {
-          nixpkgs = nixpkgsConfig;
-          users.users.${user}.home = "/Users/${user}";
-          home-manager.useUserPackages = true;
-          home-manager.useGlobalPkgs = true;
-          home-manager.users.${user} = {
-            imports = [ (./. + "/hosts/${host}/users/${user}") ];
-          };
+      mkDarwinConfig =
+        { host, user }:
+        [
+          (./. + "/hosts/${host}")
+          home-manager.darwinModules.home-manager
+          {
+            nixpkgs = nixpkgsConfig;
+            users.users.${user}.home = "/Users/${user}";
+            home-manager.useUserPackages = true;
+            home-manager.useGlobalPkgs = true;
+            home-manager.users.${user} = {
+              imports = [ (./. + "/hosts/${host}/users/${user}") ];
+            };
 
-          home-manager.extraSpecialArgs = { inherit self; };
-        }
-      ];
-    in {
+            home-manager.extraSpecialArgs = {
+              inherit self;
+            };
+          }
+        ];
+    in
+    {
 
       darwinConfigurations = {
         riverrun = darwin.lib.darwinSystem {
