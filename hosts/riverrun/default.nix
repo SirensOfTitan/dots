@@ -119,7 +119,7 @@ rec {
     ))
     neovim
     nextdns
-    lsp-ai
+    # lsp-ai
     nixfmt-rfc-style
     pandoc
     parallel
