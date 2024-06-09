@@ -98,7 +98,7 @@ rec {
     master.nix-index
     master.nodePackages.pnpm
     master.nodePackages.prettier
-    master.nodePackages.pyright
+    master.pyright
     master.nodejs-18_x
     master.devenv
     nix-tree

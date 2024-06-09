@@ -1,4 +1,10 @@
-{ pkgs, lib, nixpkgs, inputs, ... }:
+{
+  pkgs,
+  lib,
+  nixpkgs,
+  inputs,
+  ...
+}:
 
 rec {
   system.stateVersion = 4;
@@ -27,7 +33,11 @@ rec {
 
   fonts = {
     fontDir.enable = true;
-    fonts = with pkgs; [ vollkorn inter font-awesome ];
+    fonts = with pkgs; [
+      vollkorn
+      inter
+      font-awesome
+    ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -52,15 +62,18 @@ rec {
     dnsmasq
     docker
     shfmt
-    ((master.emacs29-macport.overrideAttrs {
-      version = "29.3";
-      src = pkgs.fetchFromBitbucket {
-        owner = "mituharu";
-        repo = "emacs-mac";
-        rev = "0386c590892066c4b58388848c2c93c61a505b31";
-        hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
-      };
-    }).override { withNativeCompilation = true; })
+    (
+      (master.emacs29-macport.overrideAttrs {
+        version = "29.3";
+        src = pkgs.fetchFromBitbucket {
+          owner = "mituharu";
+          repo = "emacs-mac";
+          rev = "0386c590892066c4b58388848c2c93c61a505b31";
+          hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
+        };
+      }).override
+      { withNativeCompilation = true; }
+    )
     fastmod
     fd
     gawk
@@ -75,12 +88,12 @@ rec {
     kubectx
     lldb
     master.nix-index
+    master.pyright
     master.nodePackages.pnpm
     master.nodePackages.prettier
-    master.nodePackages.pyright
     master.nodejs-18_x
-    (master.python3.withPackages (p:
-      with p; [
+    (master.python3.withPackages (
+      p: with p; [
         numpy
         sentencepiece
         pip
@@ -92,10 +105,10 @@ rec {
         setuptools
         paramiko
         rapidfuzz
-      ]))
+      ]
+    ))
     neovim
-    (google-cloud-sdk.withExtraComponents
-      [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     nextdns
     nixfmt
     pandoc
