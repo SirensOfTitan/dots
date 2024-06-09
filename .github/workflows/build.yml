@@ -31,4 +31,4 @@ jobs:
 
       - name: Build with nix
         run: |
-          nix build '.#darwinConfigurations.${{ matrix.machine }}'
+          nix build '.#darwinConfigurations.${{ matrix.machine }}.system'
