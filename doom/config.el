@@ -300,6 +300,8 @@ window instead."
            (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
           ("w" "[W]ork todo" entry "* TODO %? :FUNCTION:" :target
            (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+          ("t" "Personal [t]odo" entry "* TODO %? :PERSONAL:" :target
+           (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
           ("b" "[B]ookmark" entry
            "* [[%^{link-url}][%^{link-description}]] :BOOKMARK:" :target
            (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
@@ -474,6 +476,9 @@ window instead."
  (:after casual
          (:leader
           :desc "Calculator" "C" #'casual-main-menu)))
+
+(use-package! jinja2-mode
+  :mode (("\\.jinja2$" . jinja2-mode)))
 
 (after! corfu
   (setq! corfu-preselect t

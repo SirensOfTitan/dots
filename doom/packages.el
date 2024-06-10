@@ -121,3 +121,7 @@
 (package! babashka :recipe (:host github
                             :repo "licht1stein/babashka.el"
                             :branch "master"))
+
+(package! jinja2-mode :recipe (:host github
+                               :repo "paradoxxxzero/jinja2-mode"
+                               :branch "master"))

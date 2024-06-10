@@ -47,6 +47,8 @@ rec {
     cachix
     master.tflint
     master.iterm2
+    master.git-filter-repo
+    nodePackages.graphql-language-service-cli
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
@@ -121,6 +123,7 @@ rec {
     tree
     vim
     vollkorn
+    cloudflared
     watchman
     vscode
     yarn
@@ -172,8 +175,6 @@ rec {
       "slack"
       "shottr"
       "insomnia"
-      # Has some permission issues in macOS for the nix version.
-      "signal"
       "zoom"
       "vlc"
     ];
