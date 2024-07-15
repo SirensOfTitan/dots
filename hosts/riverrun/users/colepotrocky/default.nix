@@ -1,9 +1,20 @@
-{ config, lib, pkgs, self, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  self,
+  ...
+}:
 
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ exercism kubectl libtool master.fira ];
+  home.packages = with pkgs; [
+    exercism
+    kubectl
+    libtool
+    master.fira
+  ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
@@ -46,11 +57,14 @@
         window = {
           option_as_alt = "OnlyLeft";
           dynamic_padding = true;
-          padding = let amount = 8;
-          in {
-            x = amount;
-            y = amount;
-          };
+          padding =
+            let
+              amount = 8;
+            in
+            {
+              x = amount;
+              y = amount;
+            };
         };
         colors = {
           draw_bold_text_with_bright_colors = true;
@@ -86,7 +100,7 @@
 
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     autocd = true;
@@ -166,15 +180,19 @@
       }
     '';
 
-    sessionVariables = let editor = "${pkgs.neovim}/bin/nvim";
-    in {
-      VISUAL = editor;
-      EDITOR = editor;
-      ZSH_AUTOSUGGEST_USE_ASYNC = 1;
-      PATH = "$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
-      # Gray color for autosuggestions
-      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
-    };
+    sessionVariables =
+      let
+        editor = "${pkgs.neovim}/bin/nvim";
+      in
+      {
+        VISUAL = editor;
+        EDITOR = editor;
+        ZSH_AUTOSUGGEST_USE_ASYNC = 1;
+        PATH = "$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
+        # Gray color for autosuggestions
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
+        GROQ_API_KEY = "op://Emacs environment/Groq lsp-ai/password";
+      };
 
     shellAliases = {
       "nix!" = "(cd ~/dots && darwin-rebuild switch --flake .)";
@@ -183,7 +201,8 @@
       "glibtool" = "${pkgs.libtool}/bin/libtool";
     };
 
-    plugins = with self.inputs;
+    plugins =
+      with self.inputs;
       lib.flatten [
         {
           src = zim-completion;

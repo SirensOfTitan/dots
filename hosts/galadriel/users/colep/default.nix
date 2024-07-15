@@ -1,9 +1,18 @@
-{ config, lib, pkgs, self, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  self,
+  ...
+}:
 
 {
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs; [ kubectl master.fira ];
+  home.packages = with pkgs; [
+    kubectl
+    master.fira
+  ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
@@ -23,7 +32,7 @@
 
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     autocd = true;
@@ -103,15 +112,18 @@
       }
     '';
 
-    sessionVariables = let editor = "${pkgs.neovim}/bin/nvim";
-    in {
-      VISUAL = editor;
-      EDITOR = editor;
-      ZSH_AUTOSUGGEST_USE_ASYNC = 1;
-      PATH = "/opt/homebrew/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
-      # Gray color for autosuggestions
-      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
-    };
+    sessionVariables =
+      let
+        editor = "${pkgs.neovim}/bin/nvim";
+      in
+      {
+        VISUAL = editor;
+        EDITOR = editor;
+        ZSH_AUTOSUGGEST_USE_ASYNC = 1;
+        PATH = "/opt/homebrew/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
+        # Gray color for autosuggestions
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
+      };
 
     shellAliases = {
       "nix!" = "(cd ~/dots && darwin-rebuild switch --flake .)";
@@ -119,7 +131,8 @@
       "drive" = "cd ~/Library/Mobile\\ Documents/com~apple~CloudDocs/";
     };
 
-    plugins = with self.inputs;
+    plugins =
+      with self.inputs;
       lib.flatten [
         {
           src = zim-completion;

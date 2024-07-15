@@ -47,14 +47,11 @@
   :recipe (:host github :repo "dandavison/magit-delta" :branch "master"))
 (package! git-auto-commit-mode
   :recipe (:host github :repo "ryuslash/git-auto-commit-mode"))
-(unpin! org)
 (package! prism
   :recipe (:host github :repo "alphapapa/prism.el"))
 (package! justify-kp
   :recipe (:host github
            :repo "hekinami/justify-kp"))
-(unpin! org-roam)
-(unpin! lsp-mode)
 ;; (package! company-posframe)
 (package! websocket)
 ;; Doom's packages are pinned to a specific commit and updated from release to
@@ -69,7 +66,6 @@
            :repo "nobiot/org-transclusion"
            :branch "main"
            :files ("*.el")))
-(unpin! corfu)
 (package! org-dynamic-bullets
   :recipe (:host github
            :repo "legalnonsense/org-visual-outline"
@@ -117,7 +113,6 @@
   :recipe (:host github
            :repo "anticomputer/gh-notify"
            :branch "main"))
-(package! casual)
 (package! babashka :recipe (:host github
                             :repo "licht1stein/babashka.el"
                             :branch "master"))
@@ -125,3 +120,8 @@
 (package! jinja2-mode :recipe (:host github
                                :repo "paradoxxxzero/jinja2-mode"
                                :branch "master"))
+
+(package! nix-update-el
+  :recipe (:host github
+           :repo "jwiegley/nix-update-el"
+           :branch "master"))

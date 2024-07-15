@@ -16,24 +16,9 @@
 
 (setenv "LSP_USE_PLISTS" "true")
 (doom! :input
-       ;;chinese
-       ;;japanese
-
        :completion
        (corfu +orderless +icons +dabbrev)
        (vertico +childframe +icons)
-                                        ;(corfu +orderless)
-       ;; (company +childframe)
-
-                                        ;(company +childframe)           ; the ultimate code completion backend
-       ;; (helm +fuzzy +icons)
-                                        ; the *other* search engine for love and life
-       ;; (helm +childframe +fuzzy +icons)
-       ;;ido               ; the other *other* search engine...
-       ;; (vertico +icons)
-       ;; (ivy +prescient +fuzzy +icons +childframe)
-                                        ; a search engine for love and life
-
        :ui
        ;; deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
@@ -49,9 +34,8 @@
        (popup +all +defaults)   ; tame sudden yet inevitable temporary windows
        (ligatures +extra)       ; ligatures or substitute text with pretty symbols
        ;;tabs              ; a tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
-       vc-gutter         ; vcs diff in the fringe
+       (vc-gutter +pretty)         ; vcs diff in the fringe
        ;;vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
@@ -61,7 +45,7 @@
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
-       (format +onsave)  ; automated prettiness
+       (format +onsave +lsp)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        lispy             ; vim for lisp, for people who don't like vim
        ;;multiple-cursors  ; editing in many places at once
@@ -72,10 +56,10 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired +icons)             ; making dired pretty [functional]
-       electric          ; smarter, keyword-based electric-indent
+       (dired +icons +dirvish)             ; making dired pretty [functional]
+       ;electric          ; smarter, keyword-based electric-indent
        (ibuffer +icons)         ; interactive buffer management
-       undo              ; persistent, smarter undo for your inevitable mistakes
+       (undo +tree)              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
@@ -85,12 +69,11 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
+       (syntax +childframe +flymake +icons)              ; tasing you for every semicolon you forget
        ;;spell             ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
-       ein
        ;;ansible
        (debugger +lsp)
                                         ; FIXME stepping through code, to help you add bugs
@@ -112,8 +95,8 @@
        ;;rgb               ; creating color strings
        taskrunner        ; taskrunner for all your projects
        tree-sitter
-       terraform         ; infrastructure as code
-       ;;tmux              ; an API for interacting with tmux
+       (terraform +lsp)         ; infrastructure as code
+       tmux              ; an API for interacting with tmux
        upload            ; map local to remote projects via ssh/ftp
 
        :lang
@@ -179,6 +162,8 @@
        (yaml +lsp)              ; JSON, but readable
 
        ;; :os
+       :os
+       mac
        ;; (:if IS-MAC macos)
 
        :email
@@ -194,4 +179,4 @@
 
        :config
        ;;literate
-       (default +bindings))
+       (default +bindings +smartparens))

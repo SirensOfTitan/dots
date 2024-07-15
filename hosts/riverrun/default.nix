@@ -119,7 +119,9 @@ rec {
     ))
     neovim
     nextdns
-    # lsp-ai
+    nix-prefetch-git
+    lsp-ai
+
     nixfmt-rfc-style
     pandoc
     parallel
@@ -173,6 +175,7 @@ rec {
       "anki"
       "microsoft-office"
       "cheatsheet"
+      "1password-cli"
       "rocket"
       "calibre"
       "kindle"

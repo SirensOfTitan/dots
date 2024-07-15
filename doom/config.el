@@ -5,6 +5,9 @@
 
 (defvar header-font nil)
 
+(defun safe-local-variable-p (sym val)
+  t)
+
 ;; Workaround for https://github.com/doomemacs/doomemacs/issues/7532 in MacOS 14 Sonoma
 (add-hook 'doom-after-init-hook (lambda () (tool-bar-mode 1) (tool-bar-mode 0)))
 
@@ -14,8 +17,7 @@
 ;; clients, file templates and snippets.
 (setq user-full-name "Cole Potrocky"
       user-mail-address "cole@potrocky.com"
-      ;; doom-theme 'kaolin-valley-light
-      doom-theme 'doom-rouge
+      doom-theme 'doom-oksolar-light
       doom-font (font-spec :family "PragmataPro Mono Liga" :size 16)
       doom-big-font (font-spec :family "PragmataPro Liga")
       header-font (font-spec :family "PragmataPro Liga" :size 15)
@@ -334,12 +336,6 @@ window instead."
   :config
   (ultra-scroll-mac-mode 1))
 
-;; (after! (org-roam)
-;;   (winner-mode +1)
-;;   (map! :map winner-mode-map
-;;         "<M-right>" #'winner-redo
-;;         "<M-left>" #'winner-undo))
-
 (defun +org-auto-id-add-to-headlines-in-file ()
   "Add ID property to the current file and all its headlines."
   (when (and (or (eq major-mode 'org-mode)
@@ -351,18 +347,7 @@ window instead."
       (org-id-get-create)
       (org-map-entries #'org-id-get-create))))
 
-;; (use-package! company
-;;   :config
-;;   (setq company-idle-delay nil))
-
 (setq auth-sources '("~/.authinfo.gpg"))
-
-(after! circe
-  (set-irc-server! "irc.libera.chat"
-    `(:tls t
-      :port 6697
-      :nick "colep"
-      :sasl-password my-nickserver-password)))
 
 ;; (setq-hook! 'web-mode-hook +format-with 'dprint)
 
@@ -448,19 +433,6 @@ window instead."
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 ;; End LSP boost
 
-;; (use-package! treesit-auto
-;;   :custom
-;;   (treesit-auto-install 'prompt)
-;;   :config
-;;   (treesit-auto-add-to-auto-mode-alist 'all)
-;;   (global-treesit-auto-mode))
-
-(use-package! treesit-auto
-  :custom (treesit-auto-install 'prompt)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
-
 (use-package! difftastic
   :after magit
   :bind (:map magit-blame-read-only-mode-map
@@ -484,12 +456,45 @@ window instead."
   (setq! corfu-preselect t
          +corfu-want-minibuffer-completion nil
          corfu-max-width 70))
-;; (map! :map corfu-map
-;;       :gi "TAB" #'corfu-complete
-;;       :gi "<tab>" #'corfu-complete
-;;       :gi "C-y" #'corfu-complete)
-
-
-;; (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'python-mode))
 
 (setq-hook! 'python-mode-hook +format-with '+format-with-lsp-fn)
+;; (after! lsp-mode
+;;   (lsp-register-client
+;;    (make-lsp-client :new-connection (lsp-stdio-connection (lambda () "lsp-ai"))
+;;                     :major-modes '(nix-mode rustic-mode clojure-mode)
+;;                     :server-id 'lsp-ai
+;;                     :add-on? t
+;;                     :initialization-options
+;;                     (lambda () (append
+;;                                 `(:models (:model1 (:type "open_ai"
+;;                                                     :chat_endpoint "https://api.groq.com/openai/v1/chat/completions"
+;;                                                     :model "llama3-70b-8192"
+;;                                                     :auth_token_env_var_name "GROQ_API_KEY")))
+;;                                 `(:memory (:file_store {}))
+;;                                 `(:completion (:model "model1"
+;;                                                :parameters (:max_tokens 128
+;;                                                             :max_context 4096
+;;                                                             :messages ((:role "system"
+;;                                                                         :content "Instructions:\n- You are an AI programming assistant.\n- Given a piece of code with the cursor location marked by \"<CURSOR>\", replace \"<CURSOR>\" with the correct code or comment.\n- First, think step-by-step.\n- Describe your plan for what to build in pseudocode, written out in great detail.\n- Then output the code replacing the \"<CURSOR>\"\n- Ensure that your completion fits within the language context of the provided code snippet (e.g., Python, JavaScript, Rust).\n\nRules:\n- Only respond with code or comments.\n- Only replace \"<CURSOR>\"; do not include any previously written code.\n- Never include \"<CURSOR>\" in your response\n- If the cursor is within a comment, complete the comment meaningfully.\n- Handle ambiguous cases by providing the most contextually appropriate completion.\n- Be consistent with your responses.")
+;;                                                                        (:role "user"
+;;                                                                         :content "def greet(name):\n    print(f\"Hello, {<CURSOR>}\")")
+;;                                                                        (:role "assistant"
+;;                                                                         :content "name")
+;;                                                                        (:role "user"
+;;                                                                         :content "function sum(a, b) {\n    return a + <CURSOR>;\n}")
+;;                                                                        (:role "assistant"
+;;                                                                         :content "b")
+;;                                                                        (:role "user"
+;;                                                                         :content "fn multiply(a: i32, b: i32) -> i32 {\n    a * <CURSOR>\n}")
+;;                                                                        (:role "assistant"
+;;                                                                         :content "b")
+;;                                                                        (:role "user"
+;;                                                                         :content "# <CURSOR>\ndef add(a, b):\n    return a + b")
+;;                                                                        (:role "assistant"
+;;                                                                         :content "Adds two numbers")
+;;                                                                        (:role "user"
+;;                                                                         :content "# This function checks if a number is even\n<CURSOR>")
+;;                                                                        (:role "assistant"
+;;                                                                         :content "def is_even(n):\n    return n % 2 == 0")
+;;                                                                        (:role "user"
+;;                                                                         :content "{CODE}"))))))))))
