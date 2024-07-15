@@ -48,7 +48,6 @@ rec {
     master.tflint
     master.iterm2
     master.git-filter-repo
-    nodePackages.graphql-language-service-cli
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
@@ -89,6 +88,7 @@ rec {
     k9s
     kubectx
     lldb
+    safety-cli
     master.nix-index
     master.pyright
     master.nodePackages.pnpm
@@ -112,7 +112,7 @@ rec {
     neovim
     (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     nextdns
-    nixfmt
+    nixfmt-rfc-style
     pandoc
     parallel
     ripgrep
@@ -132,7 +132,12 @@ rec {
     bfg-repo-cleaner
     master.act
     master.helix
-    master.poetry
+    (master.poetry.withPlugins (
+      ps: with ps; [
+        poetry-plugin-up
+        poetry-audit-plugin
+      ]
+    ))
     master.git-branchless
     master.k6
     master.mermaid-cli

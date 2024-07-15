@@ -13,6 +13,8 @@
 
 ;; Annoying when using org-roam
 (setq auto-save-default nil)
+;; Stop asking if themes are safe
+(setq custom-safe-themes t)
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Cole Potrocky"
@@ -444,11 +446,6 @@ window instead."
        [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
         ("S" "Difftastic show" difftastic-magit-show)])))
 
-(map!
- (:after casual
-         (:leader
-          :desc "Calculator" "C" #'casual-main-menu)))
-
 (use-package! jinja2-mode
   :mode (("\\.jinja2$" . jinja2-mode)))
 
@@ -458,6 +455,7 @@ window instead."
          corfu-max-width 70))
 
 (setq-hook! 'python-mode-hook +format-with '+format-with-lsp-fn)
+
 ;; (after! lsp-mode
 ;;   (lsp-register-client
 ;;    (make-lsp-client :new-connection (lsp-stdio-connection (lambda () "lsp-ai"))
@@ -498,3 +496,5 @@ window instead."
 ;;                                                                         :content "def is_even(n):\n    return n % 2 == 0")
 ;;                                                                        (:role "user"
 ;;                                                                         :content "{CODE}"))))))))))
+(use-package! envrc
+  :hook (after-init . envrc-global-mode))

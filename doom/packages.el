@@ -49,11 +49,6 @@
   :recipe (:host github :repo "ryuslash/git-auto-commit-mode"))
 (package! prism
   :recipe (:host github :repo "alphapapa/prism.el"))
-(package! justify-kp
-  :recipe (:host github
-           :repo "hekinami/justify-kp"))
-;; (package! company-posframe)
-(package! websocket)
 ;; Doom's packages are pinned to a specific commit and updated from release to
 ;; release. The `unpin!' macro allows you to unpin single packages...
                                         ;(unpin! pinned-package)
@@ -61,11 +56,6 @@
                                         ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
                                         ;(unpin! t)
-(package! org-transclusion
-  :recipe (:host github
-           :repo "nobiot/org-transclusion"
-           :branch "main"
-           :files ("*.el")))
 (package! org-dynamic-bullets
   :recipe (:host github
            :repo "legalnonsense/org-visual-outline"
@@ -91,8 +81,6 @@
 (package! mermaid-mode :recipe (:host github :repo "abrochard/mermaid-mode" :branch "master"))
 (when (featurep! :lang org)
   (package! ob-mermaid))
-
-(package! treesit-auto)
 
 (when (featurep! :editor evil +everywhere)
   (package! evil-textobj-tree-sitter))
@@ -120,8 +108,11 @@
 (package! jinja2-mode :recipe (:host github
                                :repo "paradoxxxzero/jinja2-mode"
                                :branch "master"))
-
 (package! nix-update-el
   :recipe (:host github
            :repo "jwiegley/nix-update-el"
            :branch "master"))
+
+(package! envrc :recipe (:host github
+                         :repo "purcell/envrc"
+                         :branch "master"))
