@@ -42,7 +42,7 @@
 
 (package! kaolin-themes)
 (package! graphql-mode)
-(package! deadgrep)
+;(package! deadgrep)
 (package! magit-delta
   :recipe (:host github :repo "dandavison/magit-delta" :branch "master"))
 (package! git-auto-commit-mode
@@ -61,11 +61,6 @@
            :repo "legalnonsense/org-visual-outline"
            :branch "master"
            :files ("*.el")))
-
-(package! org-anki
-  :recipe (:host github
-           :repo "eyeinsky/org-anki"
-           :branch "master"))
 
 (package! ultra-scroll-mac
   :recipe (:host github

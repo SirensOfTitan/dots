@@ -15,7 +15,7 @@ rec {
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes ca-derivations
-    extra-trusted-users = colepotrocky
+    extra-trusted-users = colep
   '';
 
   nix.settings.trusted-substituters = [
@@ -84,16 +84,20 @@ rec {
     emacs-lsp-booster
     jdk
     jq
-    k6
     k9s
     kubectx
     lldb
     safety-cli
+    process-compose
+    google-cloud-sql-proxy
     master.nix-index
     master.pyright
     master.nodePackages.pnpm
     master.nodePackages.prettier
     master.nodejs-18_x
+    sapling
+    gh
+    python312Packages.vulture
     (master.python3.withPackages (
       p: with p; [
         numpy
@@ -109,6 +113,7 @@ rec {
         rapidfuzz
       ]
     ))
+    devenv
     neovim
     (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     nextdns

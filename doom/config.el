@@ -87,10 +87,10 @@
                                             (vterm-send-return))
                                         (message "Not in a projectile project.")))))))
 
-(use-package! deadgrep
-  :if (executable-find "rg")
-  :init
-  (map! "M-s" #'deadgrep))
+;; (use-package! deadgrep
+;;   :if (executable-find "rg")
+;;   :init
+;;   (map! "M-s" #'deadgrep))
 
 (after! visual-fill-column
   (setq visual-fill-column-center-text t)
@@ -126,10 +126,10 @@
       :nvi "p" #'nov-previous-document
       :nvi "t" #'nov-goto-toc)
 
-(use-package! org-anki
-  :config
-  (setq org-anki-default-deck "General")
-  (setq org-anki-default-match "+anki"))
+;; (use-package! org-anki
+;;   :config
+;;   (setq org-anki-default-deck "General")
+;;   (setq org-anki-default-match "+anki"))
 
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
@@ -454,7 +454,7 @@ window instead."
          +corfu-want-minibuffer-completion nil
          corfu-max-width 70))
 
-(setq-hook! 'python-mode-hook +format-with '+format-with-lsp-fn)
+;; (setq-hook! 'python-mode-hook +format-with '+format-with-lsp-fn)
 
 ;; (after! lsp-mode
 ;;   (lsp-register-client
