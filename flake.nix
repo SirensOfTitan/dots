@@ -5,6 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
+    mac-app-util.url = "github:hraban/mac-app-util";
+
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -90,6 +92,7 @@
       home-manager,
       mpvacious,
       fenix,
+      mac-app-util,
       ...
     }:
     let
@@ -139,10 +142,12 @@
         [
           (./. + "/hosts/${host}")
           home-manager.darwinModules.home-manager
+          mac-app-util.darwinModules.default
           {
             nixpkgs = nixpkgsConfig;
             users.users.${user}.home = "/Users/${user}";
             home-manager.useUserPackages = true;
+            home-manager.sharedModules = [ mac-app-util.homeManagerModules.default ];
             home-manager.useGlobalPkgs = true;
             home-manager.users.${user} = {
               imports = [ (./. + "/hosts/${host}/users/${user}") ];

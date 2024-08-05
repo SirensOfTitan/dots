@@ -498,3 +498,7 @@ window instead."
 ;;                                                                         :content "{CODE}"))))))))))
 (use-package! envrc
   :hook (after-init . envrc-global-mode))
+
+(add-to-list 'treesit-language-source-alist
+             '(typst "https://github.com/uben0/tree-sitter-typst"))
+(treesit-install-language-grammar 'typst)

@@ -116,3 +116,8 @@
 (package! envrc :recipe (:host github
                          :repo "purcell/envrc"
                          :branch "master"))
+
+(package! typst-ts-mode
+  :recipe (:host sourcehut
+           :repo "meow_king/typst-ts-mode"
+           :branch "main"))

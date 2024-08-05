@@ -138,6 +138,7 @@ rec {
     yarn
     ngrok
     master.helix
+    master.typst
   ];
 
   homebrew = {
@@ -165,7 +166,6 @@ rec {
       "colima"
       "pulumi"
       "cocoapods"
-      "bun"
       "editorconfig"
       "coreutils"
       "ast-grep"
