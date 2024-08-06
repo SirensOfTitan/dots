@@ -32,8 +32,7 @@ rec {
   ];
 
   fonts = {
-    fontDir.enable = true;
-    fonts = with pkgs; [
+    packages = with pkgs; [
       vollkorn
       inter
       font-awesome
