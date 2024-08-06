@@ -54,6 +54,7 @@ rec {
     master.pngpaste
     master.darwin.libiconv
 
+    php
     cmake
     libtool
     binutils
