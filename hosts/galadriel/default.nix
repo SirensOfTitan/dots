@@ -144,7 +144,6 @@ rec {
       ]
     ))
     master.git-branchless
-    master.k6
     master.mermaid-cli
   ];
 
