@@ -129,8 +129,6 @@
             master = nixpkgs-master.legacyPackages.${prev.system};
             devenv-pkgs = devenv.packages.${prev.system};
 
-            lsp-ai = (prev.callPackage ./overlays/lsp-ai.nix { });
-
             charles =
               if prev.stdenv.isDarwin then (prev.callPackage ./overlays/charles.nix { }) else prev.charles;
           })

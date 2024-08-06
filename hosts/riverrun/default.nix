@@ -118,7 +118,6 @@ rec {
     neovim
     nextdns
     nix-prefetch-git
-    lsp-ai
 
     nixfmt-rfc-style
     pandoc
