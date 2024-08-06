@@ -51,7 +51,6 @@ rec {
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
-    master.sqlite-vss
     master.nil
     master.dockfmt
     master.pngpaste
