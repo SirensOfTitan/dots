@@ -66,24 +66,22 @@ rec {
 
     (
       (master.emacs29-macport.overrideAttrs {
-        version = "29.3";
+        version = "29.4";
         src = pkgs.fetchFromBitbucket {
           owner = "mituharu";
           repo = "emacs-mac";
-          rev = "0386c590892066c4b58388848c2c93c61a505b31";
-          hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
+          rev = "7cc5e67629363d9e98f65e4e652f83bb4e0ee674";
+          hash = "sha256-Uv0AX0d5JLgxHlBD70OIDOO/ImMA6hH1fs5hCuMxw7c=";
         };
       }).override
       { withNativeCompilation = true; }
     )
     fastmod
-    graphviz
     fd
     ffmpeg
     gawk
     gitAndTools.delta
     htmlq
-    iina
     imagemagick
     emacs-lsp-booster
     jdk
@@ -91,13 +89,7 @@ rec {
     k9s
     kubectx
     yt-dlp
-    leiningen
-    lldb
     master.nix-index
-    master.nodePackages.pnpm
-    master.nodePackages.prettier
-    master.pyright
-    master.nodejs-18_x
     master.devenv
     nix-tree
     (master.python3.withPackages (
@@ -124,17 +116,12 @@ rec {
     parallel
     rclone
     ripgrep
-    scdl
     shellcheck
     time
     tldr
     tree
     vim
-    vollkorn
-    vscode
-    yarn
     ngrok
-    master.helix
     master.typst
   ];
 
@@ -156,7 +143,6 @@ rec {
       "homebrew/cask"
       "homebrew/cask-versions"
       "homebrew/core"
-      "railwaycat/emacsmacport"
     ];
 
     brews = [
@@ -170,7 +156,6 @@ rec {
 
     casks = [
       "anki"
-      "microsoft-office"
       "cheatsheet"
       "1password-cli"
       "rocket"
