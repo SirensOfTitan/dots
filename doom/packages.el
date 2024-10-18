@@ -42,7 +42,7 @@
 
 (package! kaolin-themes)
 (package! graphql-mode)
-;(package! deadgrep)
+                                        ;(package! deadgrep)
 (package! magit-delta
   :recipe (:host github :repo "dandavison/magit-delta" :branch "master"))
 (package! git-auto-commit-mode
@@ -108,6 +108,9 @@
            :repo "jwiegley/nix-update-el"
            :branch "master"))
 
+(package! deadgrep :recipe (:host github
+                            :repo "Wilfred/deadgrep"
+                            :branch "master"))
 (package! envrc :recipe (:host github
                          :repo "purcell/envrc"
                          :branch "master"))
@@ -115,4 +118,10 @@
 (package! typst-ts-mode
   :recipe (:host sourcehut
            :repo "meow_king/typst-ts-mode"
+           :branch "main"))
+
+(package! lsp-biome
+  :recipe (:host github
+           :repo "cxa/lsp-biome"
+           :files ("lsp-biome.el")
            :branch "main"))

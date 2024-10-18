@@ -53,7 +53,10 @@ rec {
     master.nil
     master.pngpaste
     master.darwin.libiconv
+    zstd
+    editorconfig-core-c
 
+    wordnet
     php
     cmake
     libtool
@@ -178,7 +181,7 @@ rec {
     ];
 
     casks = [
-      "chromium"
+      "1password-cli"
       "cheatsheet"
       "rocket"
       "slack"

@@ -57,7 +57,7 @@
 
        :emacs
        (dired +icons +dirvish)             ; making dired pretty [functional]
-       ;electric          ; smarter, keyword-based electric-indent
+                                        ;electric          ; smarter, keyword-based electric-indent
        (ibuffer +icons)         ; interactive buffer management
        (undo +tree)              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
@@ -84,7 +84,7 @@
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        gist              ; interacting with github gists
-       (lookup +docsets +dictionary)              ; navigate your code and its documentation
+       (lookup +docsets +dictionary +offline)              ; navigate your code and its documentation
        (lsp +peek)
        ;;macos             ; MacOS-specific commands
        (magit +forge)             ; a git porcelain for Emacs
@@ -126,7 +126,7 @@
        ;;idris             ;
        (json +tree-sitter +lsp)              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       (javascript +tree-sitter)   ; all(hope(abandon(ye(who(enter(here))))))
+       (javascript +tree-sitter +lsp)   ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        ;;latex             ; writing papers in Emacs has never been so fun

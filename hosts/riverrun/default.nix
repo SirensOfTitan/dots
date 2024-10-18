@@ -56,6 +56,10 @@ rec {
     master.pngpaste
     master.darwin.libiconv
 
+    zstd
+    editorconfig-core-c
+
+    wordnet
     google-cloud-sdk
 
     master.difftastic
