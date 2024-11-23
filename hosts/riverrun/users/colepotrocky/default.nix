@@ -17,15 +17,20 @@
   ];
 
   programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
-
-  # targets.genericLinux.enable = true;
+  programs.zed-editor = self.lib.zed.makeZedConfig {
+    assistantConfig = {
+      default_model = {
+        provider = "zed.dev";
+        model = "claude-3-5-sonnet-latest";
+      };
+    };
+  };
 
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Cole Potrocky";
-    userEmail = "git@potrocky.com";
+    userEmail = "cole@potrocky.com";
 
     iniContent.pull.rebase = "true";
     iniContent.merge.ff = "no";

@@ -30,6 +30,15 @@
     iniContent.merge.conflictstyle = "diff3";
   };
 
+  programs.zed-editor = self.lib.zed.makeZedConfig {
+    assistantConfig = {
+      default_model = {
+        provider = "copilot_chat";
+        model = "gpt-4o";
+      };
+    };
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;

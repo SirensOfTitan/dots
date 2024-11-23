@@ -12,6 +12,7 @@
 (setq doom-modeline-modal nil)
 
 (after! lsp-mode
+  (setq lsp-pyright-multi-root nil)
   (setq lsp-enable-symbol-highlighting nil
         lsp-enable-suggest-server-download nil))
 
