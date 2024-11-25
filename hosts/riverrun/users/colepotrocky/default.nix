@@ -17,11 +17,15 @@
   ];
 
   programs.direnv.enable = true;
-  programs.zed-editor = self.lib.zed.makeZedConfig {
-    assistantConfig = {
-      default_model = {
-        provider = "zed.dev";
-        model = "claude-3-5-sonnet-latest";
+  programs.zed-editor = pkgs.myLib.zed.makeZedConfig {
+    userSettings = {
+      features.inline_completion_provider = "supermaven";
+
+      assistant = {
+        default_model = {
+          provider = "zed.dev";
+          model = "claude-3-5-sonnet-latest";
+        };
       };
     };
   };

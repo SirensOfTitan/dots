@@ -1,6 +1,7 @@
-{ lib, pkgs }:
+{ pkgs }:
 {
-  makeZedConfig = { userSettings ? {} }: {
+  # This should deep merge userSettings, it doesn't seem to do that now, fix:
+  makeZedConfig = { userSettings ? { } }: {
     enable = true;
     package = pkgs.emptyDirectory;
 
@@ -30,7 +31,7 @@
       "terraform"
     ];
 
-    userSettings = lib.attrSets.recursiveUpdate {
+    userSettings = pkgs.lib.recursiveUpdate {
       tab_bar.show = false;
       buffer_font_family = "PragmataPro Mono Liga";
       # features.inline_completion_provider = "copilot";
@@ -50,7 +51,7 @@
       };
     } userSettings;
 
-    userKeymap = [
+    userKeymaps = [
       {
         context = "Editor && vim_mode == normal && !menu";
         bindings = {

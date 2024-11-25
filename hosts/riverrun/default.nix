@@ -8,7 +8,7 @@
 
 rec {
   system.stateVersion = 4;
-  nix.package = pkgs.master.nixVersions.nix_2_22;
+  nix.package = pkgs.master.nixVersions.nix_2_25;
   nix.configureBuildUsers = true;
 
   services.nix-daemon.enable = true;
@@ -51,8 +51,8 @@ rec {
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
+    master.nixd
     master.nil
-    master.dockfmt
     master.pngpaste
     master.darwin.libiconv
 
@@ -87,7 +87,7 @@ rec {
     gitAndTools.delta
     htmlq
     imagemagick
-    emacs-lsp-booster
+    # emacs-lsp-booster
     jdk
     jq
     k9s
@@ -101,14 +101,14 @@ rec {
         numpy
         sentencepiece
         pip
-        # Needed for lsp-bridge:
-        epc
-        orjson
-        sexpdata
-        six
-        setuptools
-        paramiko
-        rapidfuzz
+        # # Needed for lsp-bridge:
+        # epc
+        # orjson
+        # sexpdata
+        # six
+        # setuptools
+        # paramiko
+        # rapidfuzz
       ]
     ))
     neovim

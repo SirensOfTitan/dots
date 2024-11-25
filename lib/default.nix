@@ -1,3 +1,3 @@
-{ lib, pkgs, ... }: {
-  zed = import ./zed.nix { inherit lib pkgs; };
+{ pkgs, ... }: {
+  zed = import ./zed.nix { inherit pkgs; };
 }

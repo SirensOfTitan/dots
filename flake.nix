@@ -115,15 +115,9 @@
         overlays = [
           fenix.overlays.default
           (final: prev: {
-            config = {
+            config = prev.config // {
               allowUnfree = true;
               allowAliases = true;
-              allowBroken = false;
-              checkMeta = true;
-              allowUnsupportedSystem = false;
-              enableParallelBuildingByDefault = true;
-              contentAddressedByDefault = false;
-              configurePlatformsByDefault = true;
             };
 
             master = nixpkgs-master.legacyPackages.${prev.system};
@@ -131,6 +125,8 @@
 
             charles =
               if prev.stdenv.isDarwin then (prev.callPackage ./overlays/charles.nix { }) else prev.charles;
+
+            myLib = import ./lib { pkgs = prev; };
           })
         ];
       };
@@ -143,6 +139,7 @@
           mac-app-util.darwinModules.default
           {
             nixpkgs = nixpkgsConfig;
+
             users.users.${user}.home = "/Users/${user}";
             home-manager.useUserPackages = true;
             home-manager.sharedModules = [ mac-app-util.homeManagerModules.default ];
@@ -152,7 +149,7 @@
             };
 
             home-manager.extraSpecialArgs = {
-              inherit self;
+              inherit self inputs;
             };
           }
         ];
