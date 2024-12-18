@@ -101,6 +101,73 @@
 
       userKeymaps = [
         {
+          context = "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu";
+          bindings = {
+            # Projects/nav
+            "space space" = "file_finder::Toggle";
+            "space p p" = [
+              "projects::OpenRecent"
+              { "create_new_window" = false; }
+            ];
+            "space p P" = [
+              "projects::OpenRecent"
+              { "create_new_window" = true; }
+            ];
+
+            # insert
+            "space i u 4" = "editor::InsertUuidV4";
+            "space i u 7" = "editor::InsertUuidV7";
+
+            # Buffer
+            "space <" = "tab_switcher::Toggle";
+
+            # Code
+            "space c a" = "editor::ToggleCodeActions";
+            "space c x" = "diagnostics::Deploy";
+
+            # Misc toggles
+            "space t i" = "editor::ToggleInlayHints";
+            "space t w" = "editor::ToggleSoftWrap";
+
+            "space o t" = "terminal_panel::ToggleFocus";
+            # space o T: todo
+            "space o p" = "pane::RevealInProjectPanel";
+
+            # Git
+            "space g [" = "editor::GoToHunk";
+            "space g ]" = "editor::GoToPrevHunk";
+            "space g b" = "branches::OpenRecent";
+
+            # Notes:
+            "space n p" = "markdown::OpenPreview";
+            "space n P" = "markdown::OpenPreviewToTheSide";
+
+            # Search
+            "space /" = "pane::DeploySearch";
+
+            # AI
+            "space a i" = "assistant::ToggleFocus";
+
+          };
+        }
+        {
+          context = "EmptyPane || SharedScreen";
+          bindings = {
+            "space space" = "file_finder::Toggle";
+            "space p p" = [
+              "projects::OpenRecent"
+              { "create_new_window" = false; }
+            ];
+          };
+        }
+        {
+          context = "Editor && vim_mode == normal && !VimWaiting && !menu";
+          bindings = {
+            "space c r" = "editor::Rename";
+
+          };
+        }
+        {
           context = "Editor && vim_mode == normal && !menu";
           bindings = {
             "f f" = "pane::RevealInProjectPanel";

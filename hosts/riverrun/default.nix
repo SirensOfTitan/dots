@@ -61,6 +61,7 @@ rec {
 
     wordnet
     google-cloud-sdk
+    mkvtoolnix
 
     master.difftastic
     curl
