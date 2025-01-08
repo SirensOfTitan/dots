@@ -30,9 +30,11 @@
     iniContent.merge.conflictstyle = "diff3";
   };
 
-  programs.zed-editor = self.lib.zed.makeZedConfig {
-    assistantConfig = {
-      default_model = {
+  programs.my-zed = self.lib.zed.makeZedConfig {
+    enable = true;
+    settings = {
+      features.inline_completion_provider = "copilot";
+      assistant.default.model = {
         provider = "copilot_chat";
         model = "gpt-4o";
       };

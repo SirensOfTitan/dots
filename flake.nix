@@ -142,7 +142,11 @@
 
             users.users.${user}.home = "/Users/${user}";
             home-manager.useUserPackages = true;
-            home-manager.sharedModules = [ mac-app-util.homeManagerModules.default ];
+            home-manager.sharedModules = [
+              mac-app-util.homeManagerModules.default
+              ./modules/my-zed
+              ./modules/mutable-files.nix
+            ];
             home-manager.useGlobalPkgs = true;
             home-manager.users.${user} = {
               imports = [ (./. + "/hosts/${host}/users/${user}") ];

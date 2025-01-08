@@ -17,8 +17,13 @@
   ];
 
   programs.direnv.enable = true;
-  programs.zed-editor = pkgs.myLib.zed.makeZedConfig {
-    userSettings = {
+  programs.my-zed = {
+    enable = true;
+    extensions = [
+      "clojure"
+      "deno"
+    ];
+    settings = {
       features.inline_completion_provider = "supermaven";
 
       assistant = {
