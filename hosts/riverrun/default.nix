@@ -8,10 +8,7 @@
 
 rec {
   system.stateVersion = 4;
-  nix.package = pkgs.master.nixVersions.nix_2_25;
-  nix.configureBuildUsers = true;
-
-  services.nix-daemon.enable = true;
+  nix.package = pkgs.master.nixVersions.nix_2_28;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes ca-derivations
@@ -46,8 +43,13 @@ rec {
     cachix
     clojure
     cloudflared
+    htslib
+    igv
     cmake
     master.iterm2
+    telegram-desktop
+
+    master.bcftools
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
@@ -55,6 +57,14 @@ rec {
     master.nil
     master.pngpaste
     master.darwin.libiconv
+    master.tinymist
+    master.bun
+    master.nodejs_22
+    master.poetry
+    master.jujutsu
+    ccache
+
+    flox
 
     zstd
     editorconfig-core-c
@@ -69,23 +79,25 @@ rec {
     docker
     shfmt
 
-    (
-      (master.emacs29-macport.overrideAttrs {
-        version = "29.4";
-        src = pkgs.fetchFromBitbucket {
-          owner = "mituharu";
-          repo = "emacs-mac";
-          rev = "7cc5e67629363d9e98f65e4e652f83bb4e0ee674";
-          hash = "sha256-Uv0AX0d5JLgxHlBD70OIDOO/ImMA6hH1fs5hCuMxw7c=";
-        };
-      }).override
-      { withNativeCompilation = true; }
-    )
+    # (
+    #   (master.emacs29-macport.overrideAttrs {
+    #     version = "29.4";
+    #     src = pkgs.fetchFromBitbucket {
+    #       owner = "mituharu";
+    #       repo = "emacs-mac";
+    #       rev = "7cc5e67629363d9e98f65e4e652f83bb4e0ee674";
+    #       hash = "sha256-Uv0AX0d5JLgxHlBD70OIDOO/ImMA6hH1fs5hCuMxw7c=";
+    #     };
+    #   }).override
+    #   { withNativeCompilation = true; }
+    # )
+    master.uv
     fastmod
     fd
     ffmpeg
     gawk
     gitAndTools.delta
+    python312Packages.fonttools
     htmlq
     imagemagick
     # emacs-lsp-booster
@@ -128,6 +140,9 @@ rec {
     vim
     ngrok
     master.typst
+    master.woff2
+    watchman
+    meld
   ];
 
   homebrew = {
@@ -145,18 +160,27 @@ rec {
     taps = [
       "homebrew/bundle"
       "oven-sh/bun"
+      "facebook/fb"
       "homebrew/cask"
       "homebrew/cask-versions"
       "homebrew/core"
     ];
 
     brews = [
+      "swiftformat"
+      "gh"
+      "gleam"
+      "erlang"
+      "elixir"
+      "xcbeautify"
       "colima"
+      "idb-companion"
       "pulumi"
       "cocoapods"
       "editorconfig"
       "coreutils"
       "ast-grep"
+      "xcode-build-server"
     ];
 
     casks = [
@@ -186,7 +210,7 @@ rec {
     autohide = true;
     orientation = "left";
     show-recents = false;
-    expose-group-by-app = false;
+    expose-group-apps = false;
     mru-spaces = false;
     # Disable all hot corners
     wvous-bl-corner = 1;

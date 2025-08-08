@@ -1,6 +1,11 @@
 {
   description = "Cole Potrocky's nix configuration";
 
+  nixConfig = {
+    extra-trusted-substituters = [ "https://cache.flox.dev" ];
+    extra-trusted-public-keys = [ "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
@@ -12,10 +17,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    flox = {
+      url = "github:flox/flox/v1.3.16";
+    };
+
     git-branchless.url = "github:arxanas/git-branchless";
 
     darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    darwin.inputs.nixpkgs.follows = "nixpkgs-master";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -88,6 +97,7 @@
       nixpkgs,
       nixpkgs-master,
       devenv,
+      flox,
       darwin,
       home-manager,
       mpvacious,
@@ -120,11 +130,19 @@
               allowAliases = true;
             };
 
-            master = nixpkgs-master.legacyPackages.${prev.system};
+            master = import nixpkgs-master {
+              system = prev.system;
+              config.allowUnfree = true;
+              config.allowUnsupportedSystem = true;
+            };
             devenv-pkgs = devenv.packages.${prev.system};
+
+            flox = flox.packages.${prev.system}.default;
 
             charles =
               if prev.stdenv.isDarwin then (prev.callPackage ./overlays/charles.nix { }) else prev.charles;
+
+            # vep = prev.callPackage ./overlays/vep.nix { };
 
             myLib = import ./lib { pkgs = prev; };
           })
@@ -139,6 +157,8 @@
           mac-app-util.darwinModules.default
           {
             nixpkgs = nixpkgsConfig;
+
+            system.primaryUser = user;
 
             users.users.${user}.home = "/Users/${user}";
             home-manager.useUserPackages = true;

@@ -3,7 +3,6 @@
 {
   extensions = [
     "awk"
-    "deno"
     "html"
     "nix"
     "ruff"
@@ -30,7 +29,8 @@
       coloring = "indent_aware";
     };
     load_direnv = "shell_hook";
-    inlay_hints.enabled = true;
+    # So fucking annoying
+    inlay_hints.enabled = false;
     auto_signature_help = true;
     project_panel.auto_fold_dirs = true;
     slash_commands = {
@@ -41,7 +41,11 @@
     terminal.env.EDITOR = "zed --wait";
 
     buffer_font_family = "PragmataPro Mono Liga";
-    features.inline_completion_provider = "none";
+
+    features.edit_prediction_provider = "zed";
+
+    edit_predictions.mode = "subtle";
+
     telemetry = {
       metrics = false;
       diagnostics = false;
@@ -51,7 +55,7 @@
     buffer_font_size = 16;
     theme = {
       mode = "system";
-      light = "Rosé Pine Dawn";
+      light = "Gruvbox Light Hard";
       dark = "One Dark";
     };
 
@@ -61,12 +65,11 @@
       let
         tsCommon = {
           inlay_hints = {
-            enabled = true;
+            enabled = false;
             show_parameter_hints = false;
-            show_other_hints = true;
-            show_type_hints = true;
+            show_other_hints = false;
+            show_type_hints = false;
           };
-
         };
       in
       {
@@ -82,9 +85,12 @@
         };
       };
 
-    assistant = {
-      enable_experimental_live_diffs = true;
-      version = "2";
+    agent = {
+      always_allow_tool_actions = true;
+      default_model = {
+        model = "claude-opus-4-thinking";
+        provider = "zed.dev";
+      };
     };
   };
 
@@ -124,8 +130,9 @@
 
         # Git
         "space g [" = "editor::GoToHunk";
-        "space g ]" = "editor::GoToPrevHunk";
+        "space g ]" = "editor::GoToPreviousHunk";
         "space g b" = "branches::OpenRecent";
+        "space g s" = "git_panel::ToggleFocus";
 
         # Notes:
         "space n p" = "markdown::OpenPreview";

@@ -8,14 +8,11 @@
 
 rec {
   system.stateVersion = 4;
-  nix.package = pkgs.master.nixVersions.nix_2_22;
-  nix.configureBuildUsers = true;
-
-  services.nix-daemon.enable = true;
+  nix.package = pkgs.master.nixVersions.nix_2_30;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes ca-derivations
-    extra-trusted-users = colep
+    extra-trusted-users = colepotrocky
   '';
 
   nix.settings.trusted-substituters = [
@@ -44,110 +41,90 @@ rec {
     babashka
     brotli
     cachix
-    master.tflint
+    clojure
     master.iterm2
-    master.git-filter-repo
+
+    master.bcftools
 
     # Things needed for emacs to run properly.
     # nix LSP: Oh so needed.
+    master.nixd
     master.nil
     master.pngpaste
     master.darwin.libiconv
+    master.tinymist
+    master.bun
+    master.nodejs_22
+    master.poetry
+    master.jujutsu
+    ccache
+
+    flox
+
     zstd
     editorconfig-core-c
 
-    wordnet
-    php
-    cmake
-    libtool
-    binutils
+    google-cloud-sdk
+    mkvtoolnix
+
     master.difftastic
     curl
     dnsmasq
     docker
     shfmt
-    (
-      (master.emacs29-macport.overrideAttrs {
-        version = "29.3";
-        src = pkgs.fetchFromBitbucket {
-          owner = "mituharu";
-          repo = "emacs-mac";
-          rev = "0386c590892066c4b58388848c2c93c61a505b31";
-          hash = "sha256-PrGlD+/LI2X43V5hrzNHilHDQTk194Mn2aKusaZzqk8=";
-        };
-      }).override
-      { withNativeCompilation = true; }
-    )
+
+    master.uv
     fastmod
     fd
+    ffmpeg
     gawk
     gitAndTools.delta
-    iina
+    python312Packages.fonttools
+    htmlq
     imagemagick
-    emacs-lsp-booster
+    # emacs-lsp-booster
     jdk
     jq
     k9s
     kubectx
-    lldb
-    safety-cli
-    process-compose
-    google-cloud-sql-proxy
+    yt-dlp
     master.nix-index
-    master.pyright
-    master.nodePackages.pnpm
-    master.nodePackages.prettier
-    master.nodejs-18_x
-    sapling
-    gh
-    python312Packages.vulture
+    master.devenv
+    nix-tree
     (master.python3.withPackages (
       p: with p; [
         numpy
         sentencepiece
         pip
-        # Needed for lsp-bridge:
-        epc
-        orjson
-        sexpdata
-        six
-        setuptools
-        paramiko
-        rapidfuzz
+        # # Needed for lsp-bridge:
+        # epc
+        # orjson
+        # sexpdata
+        # six
+        # setuptools
+        # paramiko
+        # rapidfuzz
       ]
     ))
-    devenv
     neovim
-    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     nextdns
+    nix-prefetch-git
+
     nixfmt-rfc-style
     pandoc
     parallel
+    rclone
     ripgrep
-    scdl
     shellcheck
     time
     tldr
     tree
     vim
-    vollkorn
-    cloudflared
-    watchman
-    vscode
-    yarn
     ngrok
-    terraform
-    bfg-repo-cleaner
-    master.act
-    master.helix
-    (master.poetry.withPlugins (
-      ps: with ps; [
-        poetry-plugin-up
-        poetry-audit-plugin
-      ]
-    ))
-    master.git-branchless
-    master.mermaid-cli
+    master.typst
+    master.woff2
+    watchman
+    meld
   ];
 
   homebrew = {
@@ -165,28 +142,28 @@ rec {
     taps = [
       "homebrew/bundle"
       "oven-sh/bun"
+      "facebook/fb"
+      "homebrew/cask"
       "homebrew/cask-versions"
-      "railwaycat/emacsmacport"
+      "homebrew/core"
     ];
 
     brews = [
+      "gh"
+      "xcbeautify"
       "colima"
-      "pulumi"
+      "idb-companion"
       "cocoapods"
-      "python@3.12"
-      "bun"
       "editorconfig"
       "coreutils"
-      "libvterm"
+      "ast-grep"
+      "xcode-build-server"
     ];
 
     casks = [
-      "1password-cli"
       "cheatsheet"
-      "rocket"
+      "1password-cli"
       "slack"
-      "shottr"
-      "insomnia"
       "zoom"
       "vlc"
     ];
@@ -200,7 +177,7 @@ rec {
     autohide = true;
     orientation = "left";
     show-recents = false;
-    expose-group-by-app = false;
+    expose-group-apps = false;
     mru-spaces = false;
     # Disable all hot corners
     wvous-bl-corner = 1;

@@ -19,20 +19,6 @@
   programs.direnv.enable = true;
   programs.my-zed = {
     enable = true;
-    extensions = [
-      "clojure"
-      "deno"
-    ];
-    settings = {
-      features.inline_completion_provider = "supermaven";
-
-      assistant = {
-        default_model = {
-          provider = "zed.dev";
-          model = "claude-3-5-sonnet-latest";
-        };
-      };
-    };
   };
 
   programs.git = {
@@ -46,11 +32,28 @@
     iniContent.merge.conflictstyle = "diff3";
   };
 
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      user = {
+        name = "Cole Potrocky";
+        email = "cole@potrocky.com";
+      };
+
+      git = {
+        auto_local_bookmark = true;
+      };
+
+      templates = {
+        git_push_bookmark = "'colep/' ++ change_id.short()";
+      };
+
+      core.fsmonitor = "watchman";
+    };
+  };
+
   programs.zsh = {
     enable = true;
-    autosuggestion.enable = true;
-    enableCompletion = true;
-    syntaxHighlighting.enable = true;
     autocd = true;
     defaultKeymap = "viins";
 
@@ -71,7 +74,6 @@
     '';
 
     initExtra = ''
-      source <(${pkgs.kubectl}/bin/kubectl completion zsh)
       # keybindings for autosuggest plugin.
       bindkey '^ ' autosuggest-accept
       bindkey '^f' autosuggest-accept
@@ -126,6 +128,12 @@
               cd "$(git rev-parse --show-toplevel)" || exit 1
           fi
       }
+
+      # Load kubectl completion after zim plugins
+      source <(${pkgs.kubectl}/bin/kubectl completion zsh)
+
+      # Jujitsu
+      source <$(jj util completion zsh)
     '';
 
     sessionVariables =
@@ -143,7 +151,7 @@
       };
 
     shellAliases = {
-      "nix!" = "(cd ~/dots && darwin-rebuild switch --flake .)";
+      "nix!" = "(cd ~/dots && sudo darwin-rebuild switch --flake .)";
       "reload!" = "source $HOME/.zshrc";
       "drive" = "cd ~/Library/Mobile\\ Documents/com~apple~CloudDocs/";
       "glibtool" = "${pkgs.libtool}/bin/libtool";
@@ -153,15 +161,15 @@
       with self.inputs;
       lib.flatten [
         {
-          src = zim-completion;
-          name = "zim-completions";
-          file = "init.zsh";
-        }
-        {
           src = zim-environment;
           name = "zim-environment";
           file = "init.zsh";
         }
+        # {
+        #   src = zim-completion;
+        #   name = "zim-completions";
+        #   file = "init.zsh";
+        # }
         {
           src = zim-input;
           name = "zim-input";

@@ -10,14 +10,16 @@
   home.stateVersion = "21.05";
 
   home.packages = with pkgs; [
+    exercism
     kubectl
+    libtool
     master.fira
   ];
 
   programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
-
-  # targets.genericLinux.enable = true;
+  programs.my-zed = {
+    enable = true;
+  };
 
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
@@ -30,22 +32,28 @@
     iniContent.merge.conflictstyle = "diff3";
   };
 
-  programs.my-zed = self.lib.zed.makeZedConfig {
+  programs.jujutsu = {
     enable = true;
     settings = {
-      features.inline_completion_provider = "copilot";
-      assistant.default.model = {
-        provider = "copilot_chat";
-        model = "gpt-4o";
+      user = {
+        name = "Cole Potrocky";
+        email = "cole.potrocky@functionhealth.com";
       };
+
+      git = {
+        auto_local_bookmark = true;
+      };
+
+      templates = {
+        git_push_bookmark = "'colep/' ++ change_id.short()";
+      };
+
+      core.fsmonitor = "watchman";
     };
   };
 
   programs.zsh = {
     enable = true;
-    autosuggestion.enable = true;
-    enableCompletion = true;
-    syntaxHighlighting.enable = true;
     autocd = true;
     defaultKeymap = "viins";
 
@@ -66,7 +74,6 @@
     '';
 
     initExtra = ''
-      source <(${pkgs.kubectl}/bin/kubectl completion zsh)
       # keybindings for autosuggest plugin.
       bindkey '^ ' autosuggest-accept
       bindkey '^f' autosuggest-accept
@@ -121,6 +128,12 @@
               cd "$(git rev-parse --show-toplevel)" || exit 1
           fi
       }
+
+      # Load kubectl completion after zim plugins
+      source <(${pkgs.kubectl}/bin/kubectl completion zsh)
+
+      # Jujitsu
+      source <$(jj util completion zsh)
     '';
 
     sessionVariables =
@@ -131,28 +144,30 @@
         VISUAL = editor;
         EDITOR = editor;
         ZSH_AUTOSUGGEST_USE_ASYNC = 1;
-        PATH = "/opt/homebrew/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
+        PATH = "$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
         # Gray color for autosuggestions
         ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
+        GROQ_API_KEY = "op://Emacs environment/Groq lsp-ai/password";
       };
 
     shellAliases = {
-      "nix!" = "(cd ~/dots && darwin-rebuild switch --flake .)";
+      "nix!" = "(cd ~/dots && sudo darwin-rebuild switch --flake .)";
       "reload!" = "source $HOME/.zshrc";
       "drive" = "cd ~/Library/Mobile\\ Documents/com~apple~CloudDocs/";
+      "glibtool" = "${pkgs.libtool}/bin/libtool";
     };
 
     plugins =
       with self.inputs;
       lib.flatten [
         {
-          src = zim-completion;
-          name = "zim-completions";
+          src = zim-environment;
+          name = "zim-environment";
           file = "init.zsh";
         }
         {
-          src = zim-environment;
-          name = "zim-environment";
+          src = zim-completion;
+          name = "zim-completions";
           file = "init.zsh";
         }
         {
