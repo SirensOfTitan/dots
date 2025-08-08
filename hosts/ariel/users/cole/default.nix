@@ -10,7 +10,6 @@
   home.stateVersion = "21.05";
 
   home.packages = with pkgs; [
-    exercism
     kubectl
     libtool
     master.fira
@@ -147,13 +146,11 @@
         PATH = "$HOME/.bun/bin:$HOME/.cargo/bin:$PATH";
         # Gray color for autosuggestions
         ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=247";
-        GROQ_API_KEY = "op://Emacs environment/Groq lsp-ai/password";
       };
 
     shellAliases = {
       "nix!" = "(cd ~/dots && sudo darwin-rebuild switch --flake .)";
       "reload!" = "source $HOME/.zshrc";
-      "drive" = "cd ~/Library/Mobile\\ Documents/com~apple~CloudDocs/";
       "glibtool" = "${pkgs.libtool}/bin/libtool";
     };
 
