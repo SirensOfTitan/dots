@@ -23,7 +23,12 @@
   ];
 
   settings = {
+    bottom_dock_layout = "full";
+    restore_on_startup = "none";
+    hover_popup_enabled = false;
+    show_signature_help_after_edits = false;
     tab_bar.show = false;
+    buffer_line_height = { custom = 1.61803399; };
     indent_guides = {
       enabled = true;
       coloring = "indent_aware";
@@ -64,6 +69,9 @@
     languages =
       let
         tsCommon = {
+          code_actions_on_format = {
+            "source.organizeImports" = true;
+          };
           inlay_hints = {
             enabled = false;
             show_parameter_hints = false;
@@ -74,6 +82,7 @@
       in
       {
         "TypeScript" = tsCommon;
+        "TSX" = tsCommon;
 
         "Python" = {
           format_on_save.language_server.name = "ruff";
