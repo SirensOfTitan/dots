@@ -22,7 +22,6 @@
   };
 
   programs.git = {
-    package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Cole Potrocky";
     userEmail = "cole@potrocky.com";
@@ -48,7 +47,7 @@
         git_push_bookmark = "'colep/' ++ change_id.short()";
       };
 
-      core.fsmonitor = "watchman";
+      fsmonitor.backend = "watchman";
     };
   };
 

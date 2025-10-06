@@ -8,7 +8,7 @@
 
 rec {
   system.stateVersion = 4;
-  nix.package = pkgs.master.nixVersions.nix_2_28;
+  nix.package = pkgs.master.nixVersions.nix_2_30;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes ca-derivations
@@ -79,18 +79,6 @@ rec {
     docker
     shfmt
 
-    # (
-    #   (master.emacs29-macport.overrideAttrs {
-    #     version = "29.4";
-    #     src = pkgs.fetchFromBitbucket {
-    #       owner = "mituharu";
-    #       repo = "emacs-mac";
-    #       rev = "7cc5e67629363d9e98f65e4e652f83bb4e0ee674";
-    #       hash = "sha256-Uv0AX0d5JLgxHlBD70OIDOO/ImMA6hH1fs5hCuMxw7c=";
-    #     };
-    #   }).override
-    #   { withNativeCompilation = true; }
-    # )
     master.uv
     fastmod
     fd
@@ -100,7 +88,6 @@ rec {
     python312Packages.fonttools
     htmlq
     imagemagick
-    # emacs-lsp-booster
     jdk
     jq
     k9s
@@ -109,21 +96,6 @@ rec {
     master.nix-index
     master.devenv
     nix-tree
-    (master.python3.withPackages (
-      p: with p; [
-        numpy
-        sentencepiece
-        pip
-        # # Needed for lsp-bridge:
-        # epc
-        # orjson
-        # sexpdata
-        # six
-        # setuptools
-        # paramiko
-        # rapidfuzz
-      ]
-    ))
     neovim
     nextdns
     nix-prefetch-git
@@ -158,12 +130,8 @@ rec {
     };
 
     taps = [
-      "homebrew/bundle"
       "oven-sh/bun"
       "facebook/fb"
-      "homebrew/cask"
-      "homebrew/cask-versions"
-      "homebrew/core"
     ];
 
     brews = [
@@ -185,13 +153,11 @@ rec {
 
     casks = [
       "anki"
-      "cheatsheet"
       "1password-cli"
       "rocket"
       "calibre"
       "kindle"
       "slack"
-      "shottr"
       "transmission"
       # Has some permission issues in macOS for the nix version.
       "signal"
